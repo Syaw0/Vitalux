@@ -1,6 +1,10 @@
-trait Colorify {
-    fn paint_fg(&self) -> String;
-    fn paint_bg(&self) -> String;
+pub enum PaintType {
+    FG,
+    BG,
+}
+
+pub trait Stylify {
+    fn make_styles(&self, paint_type: Option<PaintType>) -> String;
 }
 
 pub struct BasicColor {
@@ -8,13 +12,14 @@ pub struct BasicColor {
     bg: u8,
 }
 
-impl Colorify for BasicColor {
-    fn paint_bg(&self) -> String {
-        format!("{}", self.bg)
-    }
-
-    fn paint_fg(&self) -> String {
-        format!("{}", self.fg)
+impl Stylify for BasicColor {
+    /// If the `is_foreground` was None it's assume as foreground
+    fn make_styles(&self, paint_type: Option<PaintType>) -> String {
+        let paint_type = paint_type.unwrap_or(PaintType::FG);
+        format!("{}", match paint_type {
+            PaintType::FG => self.fg,
+            PaintType::BG => self.bg,
+        })
     }
 }
 
@@ -41,12 +46,17 @@ pub struct PaletteColor {
     index: u8,
 }
 
-impl Colorify for PaletteColor {
-    fn paint_bg(&self) -> String {
-        format!("48;5;{}", self.index)
-    }
-    fn paint_fg(&self) -> String {
-        format!("38;5;{}", self.index)
+impl Stylify for PaletteColor {
+    fn make_styles(&self, paint_type: Option<PaintType>) -> String {
+        let paint_type = paint_type.unwrap_or(PaintType::FG);
+        format!(
+            "{};5;{}",
+            match paint_type {
+                PaintType::FG => "38",
+                PaintType::BG => "48",
+            },
+            self.index
+        )
     }
 }
 
@@ -56,12 +66,19 @@ pub struct RGB {
     b: u8,
 }
 
-impl Colorify for RGB {
-    fn paint_bg(&self) -> String {
-        format!("48;2;{};{};{}", self.r, self.g, self.b)
-    }
-    fn paint_fg(&self) -> String {
-        format!("38;2;{};{};{}", self.r, self.g, self.b)
+impl Stylify for RGB {
+    fn make_styles(&self, paint_type: Option<PaintType>) -> String {
+        let paint_type = paint_type.unwrap_or(PaintType::FG);
+        format!(
+            "{};2;{};{};{}",
+            match paint_type {
+                PaintType::FG => "38",
+                PaintType::BG => "48",
+            },
+            self.r,
+            self.g,
+            self.b
+        )
     }
 }
 
@@ -85,14 +102,14 @@ mod test {
 
     #[test]
     fn paint_yellow_foreground() {
-        let painted_fg = YELLOW.paint_fg();
+        let painted_fg = YELLOW.make_styles(None);
 
         assert_eq!("33", painted_fg)
     }
 
     #[test]
     fn paint_magenta_background() {
-        let painted_bg = MAGENTA.paint_bg();
+        let painted_bg = MAGENTA.make_styles(Some(PaintType::BG));
 
         assert_eq!("45", painted_bg)
     }
@@ -112,14 +129,14 @@ mod test {
     #[test]
     fn palette_paint_green_fg() {
         let green = PaletteColor { index: 118 };
-        let painted_fg = green.paint_fg();
+        let painted_fg = green.make_styles(None);
         assert_eq!("38;5;118", painted_fg)
     }
 
     #[test]
     fn palette_paint_blue_bg() {
         let blue = PaletteColor { index: 33 };
-        let painted_bg = blue.paint_bg();
+        let painted_bg = blue.make_styles(Some(PaintType::BG));
         assert_eq!("48;5;33", painted_bg)
     }
 
@@ -142,14 +159,14 @@ mod test {
     #[test]
     fn rgb_paint_purple_fg() {
         let purple = RGB { r: 126, g: 50, b: 219 };
-        let painted_fg = purple.paint_fg();
+        let painted_fg = purple.make_styles(None);
         assert_eq!("38;2;126;50;219", painted_fg)
     }
 
     #[test]
     fn rgb_paint_orange_bg() {
         let orange = RGB { r: 219, g: 132, b: 50 };
-        let painted_bg = orange.paint_bg();
+        let painted_bg = orange.make_styles(Some(PaintType::BG));
         assert_eq!("48;2;219;132;50", painted_bg)
     }
 }
