@@ -1,6 +1,21 @@
+trait Colorify {
+    fn paint_fg(&self) -> String;
+    fn paint_bg(&self) -> String;
+}
+
 pub struct BasicColor {
     fg: u8,
     bg: u8,
+}
+
+impl Colorify for BasicColor {
+    fn paint_bg(&self) -> String {
+        format!("{}", self.bg)
+    }
+
+    fn paint_fg(&self) -> String {
+        format!("{}", self.fg)
+    }
 }
 
 pub const BLACK: BasicColor = BasicColor { fg: 30, bg: 40 };
@@ -26,10 +41,28 @@ pub struct PaletteColor {
     index: u8,
 }
 
+impl Colorify for PaletteColor {
+    fn paint_bg(&self) -> String {
+        format!("48;5;{}", self.index)
+    }
+    fn paint_fg(&self) -> String {
+        format!("38;5;{}", self.index)
+    }
+}
+
 pub struct RGB {
     r: u8,
     g: u8,
     b: u8,
+}
+
+impl Colorify for RGB {
+    fn paint_bg(&self) -> String {
+        format!("48;2;{};{};{}", self.r, self.g, self.b)
+    }
+    fn paint_fg(&self) -> String {
+        format!("38;2;{};{};{}", self.r, self.g, self.b)
+    }
 }
 
 // =======================================================================
@@ -51,6 +84,20 @@ mod test {
     }
 
     #[test]
+    fn paint_yellow_foreground() {
+        let painted_fg = YELLOW.paint_fg();
+
+        assert_eq!("33", painted_fg)
+    }
+
+    #[test]
+    fn paint_magenta_background() {
+        let painted_bg = MAGENTA.paint_bg();
+
+        assert_eq!("45", painted_bg)
+    }
+
+    #[test]
     fn black_palette_color() {
         let standard_black = PaletteColor { index: 0 };
         assert_eq!(0, standard_black.index)
@@ -60,6 +107,20 @@ mod test {
     fn gray_scale_palette_color() {
         let gray_scale = PaletteColor { index: 243 };
         assert_eq!(243, gray_scale.index)
+    }
+
+    #[test]
+    fn palette_paint_green_fg() {
+        let green = PaletteColor { index: 118 };
+        let painted_fg = green.paint_fg();
+        assert_eq!("38;5;118", painted_fg)
+    }
+
+    #[test]
+    fn palette_paint_blue_bg() {
+        let blue = PaletteColor { index: 33 };
+        let painted_bg = blue.paint_bg();
+        assert_eq!("48;5;33", painted_bg)
     }
 
     #[test]
@@ -76,5 +137,19 @@ mod test {
         assert_eq!(250, salmon.r);
         assert_eq!(128, salmon.g);
         assert_eq!(114, salmon.b)
+    }
+
+    #[test]
+    fn rgb_paint_purple_fg() {
+        let purple = RGB { r: 126, g: 50, b: 219 };
+        let painted_fg = purple.paint_fg();
+        assert_eq!("38;2;126;50;219", painted_fg)
+    }
+
+    #[test]
+    fn rgb_paint_orange_bg() {
+        let orange = RGB { r: 219, g: 132, b: 50 };
+        let painted_bg = orange.paint_bg();
+        assert_eq!("48;2;219;132;50", painted_bg)
     }
 }
