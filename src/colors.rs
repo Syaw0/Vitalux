@@ -1,6 +1,6 @@
 pub struct BasicColor {
-    pub fg: u8,
-    pub bg: u8,
+    fg: u8,
+    bg: u8,
 }
 
 pub const BLACK: BasicColor = BasicColor { fg: 30, bg: 40 };
@@ -23,7 +23,13 @@ pub const BRIGHT_WHITE: BasicColor = BasicColor { fg: 97, bg: 107 };
 //
 
 pub struct PaletteColor {
-    pub index: u8,
+    index: u8,
+}
+
+pub struct RGB {
+    r: u8,
+    g: u8,
+    b: u8,
 }
 
 // =======================================================================
@@ -51,8 +57,24 @@ mod test {
     }
 
     #[test]
-    fn _palette_color() {
+    fn gray_scale_palette_color() {
         let gray_scale = PaletteColor { index: 243 };
         assert_eq!(243, gray_scale.index)
+    }
+
+    #[test]
+    fn red_rgb_color() {
+        let red = RGB { r: 255, g: 0, b: 0 };
+        assert_eq!(255, red.r);
+        assert_eq!(0, red.g);
+        assert_eq!(0, red.b)
+    }
+
+    #[test]
+    fn salmon_rgb_color() {
+        let salmon = RGB { r: 250, g: 128, b: 114 };
+        assert_eq!(250, salmon.r);
+        assert_eq!(128, salmon.g);
+        assert_eq!(114, salmon.b)
     }
 }
