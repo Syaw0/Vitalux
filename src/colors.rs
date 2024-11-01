@@ -20,6 +20,12 @@ pub const BRIGHT_MAGENTA: BasicColor = BasicColor { fg: 95, bg: 105 };
 pub const BRIGHT_CYAN: BasicColor = BasicColor { fg: 96, bg: 106 };
 pub const BRIGHT_WHITE: BasicColor = BasicColor { fg: 97, bg: 107 };
 
+//
+
+pub struct PaletteColor {
+    pub index: u8,
+}
+
 // =======================================================================
 
 #[cfg(test)]
@@ -36,5 +42,17 @@ mod test {
     fn cyan_colors() {
         assert_eq!(36, CYAN.fg);
         assert_eq!(46, CYAN.bg)
+    }
+
+    #[test]
+    fn black_palette_color() {
+        let standard_black = PaletteColor { index: 0 };
+        assert_eq!(0, standard_black.index)
+    }
+
+    #[test]
+    fn _palette_color() {
+        let gray_scale = PaletteColor { index: 243 };
+        assert_eq!(243, gray_scale.index)
     }
 }
