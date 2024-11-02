@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "Vitalux"
+name = "vitalux"
 version = "0.1.0"

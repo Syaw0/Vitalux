@@ -1,5 +1,5 @@
 [package]
-name = "Vitalux"
+name = "vitalux"
 version = "0.1.0"
 edition = "2021"
 description = "Colorize Your Terminal with Vitalux: A Rust-powered Formatting Tool"
