@@ -1,12 +1,13 @@
 pub trait Stylify {
     fn make_styles(&self, paint_type: Option<PaintType>) -> String;
 }
-
+#[derive(Debug, Clone)]
 pub enum PaintType {
     FG,
     BG,
 }
 
+#[derive(Debug, Clone)]
 pub enum Styles {
     StyleRgb(Rgb),
     StyleBasicColor(BasicColor),
@@ -30,7 +31,7 @@ impl Stylify for PaintType {
         String::new()
     }
 }
-
+#[derive(Debug, Clone)]
 pub struct BasicColor {
     fg: u8,
     bg: u8,
@@ -65,7 +66,7 @@ pub const BRIGHT_CYAN: Styles = Styles::StyleBasicColor(BasicColor { fg: 96, bg:
 pub const BRIGHT_WHITE: Styles = Styles::StyleBasicColor(BasicColor { fg: 97, bg: 107 });
 
 //
-
+#[derive(Debug, Clone)]
 pub struct PaletteColor {
     pub index: u8,
 }
@@ -83,7 +84,7 @@ impl Stylify for PaletteColor {
         )
     }
 }
-
+#[derive(Debug, Clone)]
 pub struct Rgb {
     pub r: u8,
     pub g: u8,
