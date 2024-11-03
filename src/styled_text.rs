@@ -1,25 +1,28 @@
-use crate::colors::{
-    PaintType,
-    PaletteColor,
-    Styles,
-    Stylify,
-    BLACK,
-    BLUE,
-    BRIGHT_BLUE,
-    BRIGHT_CYAN,
-    BRIGHT_GREEN,
-    BRIGHT_MAGENTA,
-    BRIGHT_RED,
-    BRIGHT_WHITE,
-    BRIGHT_YELLOW,
-    CYAN,
-    GRAY,
-    GREEN,
-    MAGENTA,
-    RED,
-    Rgb,
-    WHITE,
-    YELLOW,
+use crate::{
+    ansi_escape_code::ANSIEscapeCode,
+    colors::{
+        PaintType,
+        PaletteColor,
+        Rgb,
+        Styles,
+        Stylify,
+        BLACK,
+        BLUE,
+        BRIGHT_BLUE,
+        BRIGHT_CYAN,
+        BRIGHT_GREEN,
+        BRIGHT_MAGENTA,
+        BRIGHT_RED,
+        BRIGHT_WHITE,
+        BRIGHT_YELLOW,
+        CYAN,
+        GRAY,
+        GREEN,
+        MAGENTA,
+        RED,
+        WHITE,
+        YELLOW,
+    },
 };
 
 // =======================================================================
@@ -49,36 +52,27 @@ impl StyledText {
 
     pub fn paint(&mut self) -> String {
         println!("{:?}", self.start_styles);
-        let mut default_paint_type = Styles::StylePaintType(PaintType::FG);
-        let indexes: Vec<usize> = self.start_styles
+        let mut default_paint_type = PaintType::FG;
+
+        let start_codes_list: Vec<String> = self.start_styles
             .iter()
-            .enumerate()
-            .filter_map(|(index, style)| {
-                match style {
-                    Styles::StylePaintType(_) => Some(index),
-                    _ => None,
+            .rev()
+            .filter_map(|s| {
+                if let Styles::StylePaintType(p) = s {
+                    default_paint_type = p.clone();
+                    return None;
                 }
+                let t = s.make_styles(Some(&default_paint_type));
+                Some(ANSIEscapeCode::new(t.as_str()).code())
             })
+            .collect::<Vec<_>>()
+            .into_iter()
+            .rev()
             .collect();
+        let start_codes = start_codes_list.join("");
+        let end_codes = ANSIEscapeCode::new("0").code();
 
-        if indexes.len() == 1 {
-            // We sure about 1 element exist on i
-            default_paint_type = self.start_styles
-                .get(indexes[0])
-                .unwrap_or(&default_paint_type)
-                .clone();
-
-            // * call for make style on start_styles
-        }
-        if indexes.len() > 1 {
-            // * each slice get it's own paint type!
-        }
-
-        println!("{:?}", indexes);
-        // Add formatter reset in the end
-        // self.end_styles.push();
-        // format!()
-        String::new()
+        format!("{}{}{}", start_codes, self.text, end_codes)
     }
 
     pub fn fg(&mut self) -> &mut Self {
