@@ -51,7 +51,6 @@ impl StyledText {
     }
 
     pub fn paint(&mut self) -> String {
-        println!("{:?}", self.start_styles);
         let mut default_paint_type = PaintType::FG;
 
         let start_codes_list: Vec<String> = self.start_styles
@@ -183,9 +182,16 @@ mod test {
     use super::*;
 
     #[test]
-    fn test_paint_type() {
-        let txt = txt("Siavash").bright_blue().fg().red().bg().paint();
-        assert_eq!(true, false);
+    fn white_fg_black_bg() {
+        let raw_text = "I'm So Happy";
+        let styled_text = txt(raw_text).white().bg().black().fg().paint();
+        assert_eq!(styled_text, "\x1b[47m\x1b[30mI'm So Happy\x1b[0m");
+    }
+
+    fn blue_fg_bright_cyan_bg() {
+        let raw_text = "Silence is power";
+        let styled_text = txt(raw_text).blue().fg().bright_cyan().bg().paint();
+        assert_eq!(styled_text, "\x1b[34m\x1b[106mSilence is power\x1b[0m");
     }
 
     #[test]
