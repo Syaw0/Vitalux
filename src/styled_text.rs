@@ -1,8 +1,8 @@
 use crate::colors::{
     PaintType,
     PaletteColor,
+    Styles,
     Stylify,
-    RGB,
     BLACK,
     BLUE,
     BRIGHT_BLUE,
@@ -17,6 +17,7 @@ use crate::colors::{
     GREEN,
     MAGENTA,
     RED,
+    Rgb,
     WHITE,
     YELLOW,
 };
@@ -31,7 +32,7 @@ pub fn txt(text: &str) -> StyledText {
 
 pub struct StyledText {
     text: String,
-    start_styles: Vec<Box<dyn Stylify>>,
+    start_styles: Vec<Styles>,
     end_styles: Vec<Box<dyn Stylify>>,
 }
 
@@ -47,91 +48,134 @@ impl StyledText {
     }
 
     pub fn paint(&mut self) -> String {
+        let indexes: Vec<usize> = self.start_styles
+            .iter()
+            .enumerate()
+            .filter_map(|(index, style)| {
+                match style {
+                    Styles::StylePaintType(_) => Some(index),
+                    _ => None,
+                }
+            })
+            .collect();
+
+        println!("{:?}", indexes);
         // Add formatter reset in the end
         // self.end_styles.push();
         // format!()
         String::new()
     }
 
-    pub fn fg(&mut self) {
-        self.start_styles.push(Box::new(PaintType::FG));
+    pub fn fg(&mut self) -> &mut Self {
+        self.start_styles.push(Styles::StylePaintType(PaintType::FG));
+        self
     }
 
-    pub fn bg(&mut self) {
-        self.start_styles.push(Box::new(PaintType::BG));
+    pub fn bg(&mut self) -> &mut Self {
+        self.start_styles.push(Styles::StylePaintType(PaintType::BG));
+        self
     }
 
     // Colors
 
-    pub fn rgb(&mut self, r: u8, g: u8, b: u8) {
-        self.start_styles.push(Box::new(RGB { r, g, b }));
+    pub fn rgb(&mut self, r: u8, g: u8, b: u8) -> &mut Self {
+        self.start_styles.push(Styles::StyleRgb(Rgb { r, g, b }));
+        self
     }
 
-    pub fn palette(&mut self, index: u8) {
-        self.start_styles.push(Box::new(PaletteColor { index }));
+    pub fn palette(&mut self, index: u8) -> &mut Self {
+        self.start_styles.push(Styles::StylePaletteColor(PaletteColor { index }));
+        self
     }
 
-    pub fn black(&mut self) {
-        self.start_styles.push(Box::new(BLACK));
+    pub fn black(&mut self) -> &mut Self {
+        self.start_styles.push(BLACK);
+        self
     }
 
-    pub fn red(&mut self) {
-        self.start_styles.push(Box::new(RED));
+    pub fn red(&mut self) -> &mut Self {
+        self.start_styles.push(RED);
+        self
     }
 
-    pub fn green(&mut self) {
-        self.start_styles.push(Box::new(GREEN));
+    pub fn green(&mut self) -> &mut Self {
+        self.start_styles.push(GREEN);
+        self
     }
 
-    pub fn yellow(&mut self) {
-        self.start_styles.push(Box::new(YELLOW));
+    pub fn yellow(&mut self) -> &mut Self {
+        self.start_styles.push(YELLOW);
+        self
     }
 
-    pub fn blue(&mut self) {
-        self.start_styles.push(Box::new(BLUE));
+    pub fn blue(&mut self) -> &mut Self {
+        self.start_styles.push(BLUE);
+        self
     }
 
-    pub fn magenta(&mut self) {
-        self.start_styles.push(Box::new(MAGENTA));
+    pub fn magenta(&mut self) -> &mut Self {
+        self.start_styles.push(MAGENTA);
+        self
     }
 
-    pub fn cyan(&mut self) {
-        self.start_styles.push(Box::new(CYAN));
+    pub fn cyan(&mut self) -> &mut Self {
+        self.start_styles.push(CYAN);
+        self
     }
 
-    pub fn white(&mut self) {
-        self.start_styles.push(Box::new(WHITE));
+    pub fn white(&mut self) -> &mut Self {
+        self.start_styles.push(WHITE);
+        self
     }
 
-    pub fn gray(&mut self) {
-        self.start_styles.push(Box::new(GRAY));
+    pub fn gray(&mut self) -> &mut Self {
+        self.start_styles.push(GRAY);
+        self
     }
 
-    pub fn bright_red(&mut self) {
-        self.start_styles.push(Box::new(BRIGHT_RED));
+    pub fn bright_red(&mut self) -> &mut Self {
+        self.start_styles.push(BRIGHT_RED);
+        self
     }
 
-    pub fn bright_green(&mut self) {
-        self.start_styles.push(Box::new(BRIGHT_GREEN));
+    pub fn bright_green(&mut self) -> &mut Self {
+        self.start_styles.push(BRIGHT_GREEN);
+        self
     }
 
-    pub fn bright_yellow(&mut self) {
-        self.start_styles.push(Box::new(BRIGHT_YELLOW));
+    pub fn bright_yellow(&mut self) -> &mut Self {
+        self.start_styles.push(BRIGHT_YELLOW);
+        self
     }
 
-    pub fn bright_blue(&mut self) {
-        self.start_styles.push(Box::new(BRIGHT_BLUE));
+    pub fn bright_blue(&mut self) -> &mut Self {
+        self.start_styles.push(BRIGHT_BLUE);
+        self
     }
 
-    pub fn bright_magenta(&mut self) {
-        self.start_styles.push(Box::new(BRIGHT_MAGENTA));
+    pub fn bright_magenta(&mut self) -> &mut Self {
+        self.start_styles.push(BRIGHT_MAGENTA);
+        self
     }
 
-    pub fn bright_cyan(&mut self) {
-        self.start_styles.push(Box::new(BRIGHT_CYAN));
+    pub fn bright_cyan(&mut self) -> &mut Self {
+        self.start_styles.push(BRIGHT_CYAN);
+        self
     }
 
-    pub fn bright_white(&mut self) {
-        self.start_styles.push(Box::new(BRIGHT_WHITE));
+    pub fn bright_white(&mut self) -> &mut Self {
+        self.start_styles.push(BRIGHT_WHITE);
+        self
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_paint_type() {
+        let txt = txt("Siavash").bright_blue().fg().red().yellow().bg().paint();
+        assert_eq!(true, false);
     }
 }
