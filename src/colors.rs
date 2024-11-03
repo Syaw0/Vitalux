@@ -1,5 +1,5 @@
 pub trait Stylify {
-    fn make_styles(&self, paint_type: Option<PaintType>) -> String;
+    fn make_styles(&self, paint_type: Option<&PaintType>) -> String;
 }
 #[derive(Debug, Clone)]
 pub enum PaintType {
@@ -16,7 +16,7 @@ pub enum Styles {
 }
 
 impl Styles {
-    fn make_styles(&self, paint_type: Option<PaintType>) -> String {
+    pub fn make_styles(&self, paint_type: Option<&PaintType>) -> String {
         match self {
             Styles::StyleBasicColor(c) => c.make_styles(paint_type),
             Styles::StylePaintType(c) => c.make_styles(paint_type),
@@ -27,7 +27,7 @@ impl Styles {
 }
 
 impl Stylify for PaintType {
-    fn make_styles(&self, _paint_type: Option<PaintType>) -> String {
+    fn make_styles(&self, _paint_type: Option<&PaintType>) -> String {
         String::new()
     }
 }
@@ -39,8 +39,8 @@ pub struct BasicColor {
 
 impl Stylify for BasicColor {
     /// If the `is_foreground` was None it's assume as foreground
-    fn make_styles(&self, paint_type: Option<PaintType>) -> String {
-        let paint_type = paint_type.unwrap_or(PaintType::FG);
+    fn make_styles(&self, paint_type: Option<&PaintType>) -> String {
+        let paint_type = paint_type.unwrap_or(&PaintType::FG);
         format!("{}", match paint_type {
             PaintType::FG => self.fg,
             PaintType::BG => self.bg,
@@ -72,8 +72,8 @@ pub struct PaletteColor {
 }
 
 impl Stylify for PaletteColor {
-    fn make_styles(&self, paint_type: Option<PaintType>) -> String {
-        let paint_type = paint_type.unwrap_or(PaintType::FG);
+    fn make_styles(&self, paint_type: Option<&PaintType>) -> String {
+        let paint_type = paint_type.unwrap_or(&PaintType::FG);
         format!(
             "{};5;{}",
             match paint_type {
@@ -92,8 +92,8 @@ pub struct Rgb {
 }
 
 impl Stylify for Rgb {
-    fn make_styles(&self, paint_type: Option<PaintType>) -> String {
-        let paint_type = paint_type.unwrap_or(PaintType::FG);
+    fn make_styles(&self, paint_type: Option<&PaintType>) -> String {
+        let paint_type = paint_type.unwrap_or(&PaintType::FG);
         format!(
             "{};2;{};{};{}",
             match paint_type {
@@ -136,7 +136,7 @@ mod test {
 
     #[test]
     fn paint_magenta_background() {
-        let painted_bg = MAGENTA.make_styles(Some(PaintType::BG));
+        let painted_bg = MAGENTA.make_styles(Some(&PaintType::BG));
 
         assert_eq!("45", painted_bg)
     }
@@ -163,7 +163,7 @@ mod test {
     #[test]
     fn palette_paint_blue_bg() {
         let blue = PaletteColor { index: 33 };
-        let painted_bg = blue.make_styles(Some(PaintType::BG));
+        let painted_bg = blue.make_styles(Some(&PaintType::BG));
         assert_eq!("48;5;33", painted_bg)
     }
 
@@ -193,7 +193,7 @@ mod test {
     #[test]
     fn rgb_paint_orange_bg() {
         let orange = Rgb { r: 219, g: 132, b: 50 };
-        let painted_bg = orange.make_styles(Some(PaintType::BG));
+        let painted_bg = orange.make_styles(Some(&PaintType::BG));
         assert_eq!("48;2;219;132;50", painted_bg)
     }
 }
