@@ -48,6 +48,8 @@ impl StyledText {
     }
 
     pub fn paint(&mut self) -> String {
+        println!("{:?}", self.start_styles);
+        let mut default_paint_type = Styles::StylePaintType(PaintType::FG);
         let indexes: Vec<usize> = self.start_styles
             .iter()
             .enumerate()
@@ -58,6 +60,19 @@ impl StyledText {
                 }
             })
             .collect();
+
+        if indexes.len() == 1 {
+            // We sure about 1 element exist on i
+            default_paint_type = self.start_styles
+                .get(indexes[0])
+                .unwrap_or(&default_paint_type)
+                .clone();
+
+            // * call for make style on start_styles
+        }
+        if indexes.len() > 1 {
+            // * each slice get it's own paint type!
+        }
 
         println!("{:?}", indexes);
         // Add formatter reset in the end
@@ -175,7 +190,44 @@ mod test {
 
     #[test]
     fn test_paint_type() {
-        let txt = txt("Siavash").bright_blue().fg().red().yellow().bg().paint();
+        let txt = txt("Siavash").bright_blue().fg().red().bg().paint();
         assert_eq!(true, false);
+    }
+
+    #[test]
+    fn test_with_one_paint_type() {
+        let no: Vec<Styles> = txt("Hello there")
+            .bright_blue()
+            .red()
+            .bg()
+            .start_styles.iter()
+            .filter(|s| {
+                match s {
+                    Styles::StylePaintType(_) => true,
+                    _ => false,
+                }
+            })
+            .cloned()
+            .collect();
+
+        assert_eq!(no.len(), 1)
+    }
+
+    #[test]
+    fn test_with_zero_paint_type() {
+        let no: Vec<Styles> = txt("Hello there")
+            .bright_blue()
+            .red()
+            .start_styles.iter()
+            .filter(|s| {
+                match s {
+                    Styles::StylePaintType(_) => true,
+                    _ => false,
+                }
+            })
+            .cloned()
+            .collect();
+
+        assert_eq!(no.len(), 0)
     }
 }
