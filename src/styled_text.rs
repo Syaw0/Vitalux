@@ -35,8 +35,52 @@ use crate::{
 
 // =======================================================================
 
-// this is public api for users
-/// # TXT
+/// Creates a styled text string with the given text and styles.
+///
+/// This function returns a `StyledText` object that can be customized with various styles,
+/// colors, and effects. The resulting styled text can be printed or used in other contexts.
+///
+/// # Examples
+///
+/// ```
+/// use vitalux::styled;
+///
+/// let txt = styled("Happy Day!")
+///     .rgb(204, 182, 122)
+///     .italic()
+///     .rapid_blink()
+///     .bg()
+///     .rgb(74, 56, 7)
+///     .fg()
+///     .paint();
+/// println!("{txt}");
+/// ```
+///
+/// # Styles
+///
+/// The following styles can be applied to the text:
+///
+/// * `rgb(r, g, b)`: Sets the text color to the given RGB values.
+/// * `italic()`: Sets the text to italic.
+/// * `rapid_blink()`: Sets the text to rapidly blink.
+/// * `bg()`: Sets the background color.
+/// * `fg()`: Sets the foreground color.
+///
+/// # Colors
+///
+/// The following colors can be used with the `rgb` method:
+///
+/// * `rgb(r, g, b)`: Sets the color to the given RGB values.
+///
+/// # Effects
+///
+/// The following effects can be applied to the text:
+///
+/// * `rapid_blink()`: Sets the text to rapidly blink.
+///
+/// # Returns
+///
+/// A `StyledText` object that can be printed or used in other contexts.
 pub fn styled(text: &str) -> StyledText {
     StyledText::new(text.to_string())
 }
