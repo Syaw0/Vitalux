@@ -8,6 +8,7 @@ use crate::{
         Stylify,
         BLACK,
         BLUE,
+        BOLD,
         BRIGHT_BLUE,
         BRIGHT_CYAN,
         BRIGHT_GREEN,
@@ -16,10 +17,17 @@ use crate::{
         BRIGHT_WHITE,
         BRIGHT_YELLOW,
         CYAN,
+        FAINT,
         GRAY,
         GREEN,
+        ITALIC,
         MAGENTA,
+        OVERLINE,
+        RAPID_BLINK,
         RED,
+        RESET,
+        SLOW_BLINK,
+        UNDERLINE,
         WHITE,
         YELLOW,
     },
@@ -69,7 +77,7 @@ impl StyledText {
             .rev()
             .collect();
         let start_codes = start_codes_list.join("");
-        let end_codes = ANSIEscapeCode::new("0").code();
+        let end_codes = ANSIEscapeCode::new(&RESET.make_styles(Some(&default_paint_type))).code();
 
         format!("{}{}{}", start_codes, self.text, end_codes)
     }
@@ -173,6 +181,43 @@ impl StyledText {
 
     pub fn bright_white(&mut self) -> &mut Self {
         self.start_styles.push(BRIGHT_WHITE);
+        self
+    }
+
+    // formatters
+
+    pub fn bold(&mut self) -> &mut Self {
+        self.start_styles.push(BOLD);
+        self
+    }
+
+    pub fn faint(&mut self) -> &mut Self {
+        self.start_styles.push(FAINT);
+        self
+    }
+
+    pub fn italic(&mut self) -> &mut Self {
+        self.start_styles.push(ITALIC);
+        self
+    }
+
+    pub fn underline(&mut self) -> &mut Self {
+        self.start_styles.push(UNDERLINE);
+        self
+    }
+
+    pub fn slow_blink(&mut self) -> &mut Self {
+        self.start_styles.push(SLOW_BLINK);
+        self
+    }
+
+    pub fn rapid_blink(&mut self) -> &mut Self {
+        self.start_styles.push(RAPID_BLINK);
+        self
+    }
+
+    pub fn overline(&mut self) -> &mut Self {
+        self.start_styles.push(OVERLINE);
         self
     }
 }
