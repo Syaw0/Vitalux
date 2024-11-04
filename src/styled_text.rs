@@ -37,7 +37,7 @@ use crate::{
 
 // this is public api for users
 /// # TXT
-pub fn txt(text: &str) -> StyledText {
+pub fn styled(text: &str) -> StyledText {
     StyledText::new(text.to_string())
 }
 
@@ -186,6 +186,11 @@ impl StyledText {
 
     // formatters
 
+    pub fn reset(&mut self) -> &mut Self {
+        self.start_styles.push(RESET);
+        self
+    }
+
     pub fn bold(&mut self) -> &mut Self {
         self.start_styles.push(BOLD);
         self
@@ -229,19 +234,19 @@ mod test {
     #[test]
     fn white_fg_black_bg() {
         let raw_text = "I'm So Happy";
-        let styled_text = txt(raw_text).white().bg().black().fg().paint();
+        let styled_text = styled(raw_text).white().bg().black().fg().paint();
         assert_eq!(styled_text, "\x1b[47m\x1b[30mI'm So Happy\x1b[0m");
     }
 
     fn blue_fg_bright_cyan_bg() {
         let raw_text = "Silence is power";
-        let styled_text = txt(raw_text).blue().fg().bright_cyan().bg().paint();
+        let styled_text = styled(raw_text).blue().fg().bright_cyan().bg().paint();
         assert_eq!(styled_text, "\x1b[34m\x1b[106mSilence is power\x1b[0m");
     }
 
     #[test]
     fn test_with_one_paint_type() {
-        let no: Vec<Styles> = txt("Hello there")
+        let no: Vec<Styles> = styled("Hello there")
             .bright_blue()
             .red()
             .bg()
@@ -260,7 +265,7 @@ mod test {
 
     #[test]
     fn test_with_zero_paint_type() {
-        let no: Vec<Styles> = txt("Hello there")
+        let no: Vec<Styles> = styled("Hello there")
             .bright_blue()
             .red()
             .start_styles.iter()
