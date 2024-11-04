@@ -5,7 +5,6 @@ use crate::{
         PaletteColor,
         Rgb,
         Styles,
-        Stylify,
         BLACK,
         BLUE,
         BOLD,
@@ -88,7 +87,6 @@ pub fn styled(text: &str) -> StyledText {
 pub struct StyledText {
     text: String,
     start_styles: Vec<Styles>,
-    end_styles: Vec<Box<dyn Stylify>>,
 }
 
 impl StyledText {
@@ -98,7 +96,6 @@ impl StyledText {
         StyledText {
             text,
             start_styles: vec![],
-            end_styles: vec![],
         }
     }
 
@@ -282,6 +279,7 @@ mod test {
         assert_eq!(styled_text, "\x1b[47m\x1b[30mI'm So Happy\x1b[0m");
     }
 
+    #[test]
     fn blue_fg_bright_cyan_bg() {
         let raw_text = "Silence is power";
         let styled_text = styled(raw_text).blue().fg().bright_cyan().bg().paint();

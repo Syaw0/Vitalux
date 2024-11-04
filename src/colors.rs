@@ -1,6 +1,5 @@
-pub trait Stylify {
-    fn make_styles(&self, paint_type: Option<&PaintType>) -> String;
-}
+use crate::traits::Stylify;
+
 #[derive(Debug, Clone)]
 pub enum PaintType {
     FG,
@@ -8,7 +7,7 @@ pub enum PaintType {
 }
 
 #[derive(Debug, Clone)]
-struct Formatter {
+pub struct Formatter {
     n: u8,
 }
 
