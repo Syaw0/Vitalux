@@ -1,34 +1,12 @@
 use crate::{
     ansi_escape_code::ANSIEscapeCode,
-    colors::{
-        PaintType,
-        PaletteColor,
-        Rgb,
+    styles::{
+        basic_color,
+        formatter,
+        paint_type::PaintType,
+        palette::PaletteColor,
+        rgb::Rgb,
         Styles,
-        BLACK,
-        BLUE,
-        BOLD,
-        BRIGHT_BLUE,
-        BRIGHT_CYAN,
-        BRIGHT_GREEN,
-        BRIGHT_MAGENTA,
-        BRIGHT_RED,
-        BRIGHT_WHITE,
-        BRIGHT_YELLOW,
-        CYAN,
-        FAINT,
-        GRAY,
-        GREEN,
-        ITALIC,
-        MAGENTA,
-        OVERLINE,
-        RAPID_BLINK,
-        RED,
-        RESET,
-        SLOW_BLINK,
-        UNDERLINE,
-        WHITE,
-        YELLOW,
     },
 };
 
@@ -118,7 +96,9 @@ impl StyledText {
             .rev()
             .collect();
         let start_codes = start_codes_list.join("");
-        let end_codes = ANSIEscapeCode::new(&RESET.make_styles(Some(&default_paint_type))).code();
+        let end_codes = ANSIEscapeCode::new(
+            &formatter::RESET.make_styles(Some(&default_paint_type))
+        ).code();
 
         format!("{}{}{}", start_codes, self.text, end_codes)
     }
@@ -146,124 +126,124 @@ impl StyledText {
     }
 
     pub fn black(&mut self) -> &mut Self {
-        self.start_styles.push(BLACK);
+        self.start_styles.push(basic_color::BLACK);
         self
     }
 
     pub fn red(&mut self) -> &mut Self {
-        self.start_styles.push(RED);
+        self.start_styles.push(basic_color::RED);
         self
     }
 
     pub fn green(&mut self) -> &mut Self {
-        self.start_styles.push(GREEN);
+        self.start_styles.push(basic_color::GREEN);
         self
     }
 
     pub fn yellow(&mut self) -> &mut Self {
-        self.start_styles.push(YELLOW);
+        self.start_styles.push(basic_color::YELLOW);
         self
     }
 
     pub fn blue(&mut self) -> &mut Self {
-        self.start_styles.push(BLUE);
+        self.start_styles.push(basic_color::BLUE);
         self
     }
 
     pub fn magenta(&mut self) -> &mut Self {
-        self.start_styles.push(MAGENTA);
+        self.start_styles.push(basic_color::MAGENTA);
         self
     }
 
     pub fn cyan(&mut self) -> &mut Self {
-        self.start_styles.push(CYAN);
+        self.start_styles.push(basic_color::CYAN);
         self
     }
 
     pub fn white(&mut self) -> &mut Self {
-        self.start_styles.push(WHITE);
+        self.start_styles.push(basic_color::WHITE);
         self
     }
 
     pub fn gray(&mut self) -> &mut Self {
-        self.start_styles.push(GRAY);
+        self.start_styles.push(basic_color::GRAY);
         self
     }
 
     pub fn bright_red(&mut self) -> &mut Self {
-        self.start_styles.push(BRIGHT_RED);
+        self.start_styles.push(basic_color::BRIGHT_RED);
         self
     }
 
     pub fn bright_green(&mut self) -> &mut Self {
-        self.start_styles.push(BRIGHT_GREEN);
+        self.start_styles.push(basic_color::BRIGHT_GREEN);
         self
     }
 
     pub fn bright_yellow(&mut self) -> &mut Self {
-        self.start_styles.push(BRIGHT_YELLOW);
+        self.start_styles.push(basic_color::BRIGHT_YELLOW);
         self
     }
 
     pub fn bright_blue(&mut self) -> &mut Self {
-        self.start_styles.push(BRIGHT_BLUE);
+        self.start_styles.push(basic_color::BRIGHT_BLUE);
         self
     }
 
     pub fn bright_magenta(&mut self) -> &mut Self {
-        self.start_styles.push(BRIGHT_MAGENTA);
+        self.start_styles.push(basic_color::BRIGHT_MAGENTA);
         self
     }
 
     pub fn bright_cyan(&mut self) -> &mut Self {
-        self.start_styles.push(BRIGHT_CYAN);
+        self.start_styles.push(basic_color::BRIGHT_CYAN);
         self
     }
 
     pub fn bright_white(&mut self) -> &mut Self {
-        self.start_styles.push(BRIGHT_WHITE);
+        self.start_styles.push(basic_color::BRIGHT_WHITE);
         self
     }
 
     // formatters
 
     pub fn reset(&mut self) -> &mut Self {
-        self.start_styles.push(RESET);
+        self.start_styles.push(formatter::RESET);
         self
     }
 
     pub fn bold(&mut self) -> &mut Self {
-        self.start_styles.push(BOLD);
+        self.start_styles.push(formatter::BOLD);
         self
     }
 
     pub fn faint(&mut self) -> &mut Self {
-        self.start_styles.push(FAINT);
+        self.start_styles.push(formatter::FAINT);
         self
     }
 
     pub fn italic(&mut self) -> &mut Self {
-        self.start_styles.push(ITALIC);
+        self.start_styles.push(formatter::ITALIC);
         self
     }
 
     pub fn underline(&mut self) -> &mut Self {
-        self.start_styles.push(UNDERLINE);
+        self.start_styles.push(formatter::UNDERLINE);
         self
     }
 
     pub fn slow_blink(&mut self) -> &mut Self {
-        self.start_styles.push(SLOW_BLINK);
+        self.start_styles.push(formatter::SLOW_BLINK);
         self
     }
 
     pub fn rapid_blink(&mut self) -> &mut Self {
-        self.start_styles.push(RAPID_BLINK);
+        self.start_styles.push(formatter::RAPID_BLINK);
         self
     }
 
     pub fn overline(&mut self) -> &mut Self {
-        self.start_styles.push(OVERLINE);
+        self.start_styles.push(formatter::OVERLINE);
         self
     }
 }
