@@ -2,14 +2,19 @@ use super::{ paint_type::PaintType, Styles, Stylify };
 
 // =======================================================================
 
+/// A struct representing a basic color with foreground and background values.
 #[derive(Debug, Clone)]
 pub struct BasicColor {
+    /// The foreground color value.
     fg: u8,
+    /// The background color value.
     bg: u8,
 }
 
 impl Stylify for BasicColor {
-    /// If the `is_foreground` was None it's assume as foreground
+    /// Returns a string representation of the color style.
+    ///
+    /// If `paint_type` is `None`, the foreground color is assumed.
     fn make_styles(&self, paint_type: Option<&PaintType>) -> String {
         let paint_type = paint_type.unwrap_or(&PaintType::FG);
         format!("{}", match paint_type {
@@ -19,6 +24,13 @@ impl Stylify for BasicColor {
     }
 }
 
+/// A macro for generating color constants.
+///
+/// Usage:
+///
+/// ```rust
+/// color_code!(MY_COLOR, { fg: 30, bg: 40 });
+/// ```
 macro_rules! color_code {
     ($name:ident, { fg: $fg:expr, bg: $bg:expr }) => {
         pub const $name:Styles = Styles::StyleBasicColor(BasicColor { fg: $fg, bg: $bg });
