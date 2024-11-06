@@ -2,17 +2,22 @@ use super::{ paint_type::PaintType, Styles, Stylify };
 
 // =======================================================================
 
+/// A struct representing a Formatter with code value.
 #[derive(Debug, Clone)]
 pub struct Formatter {
     code: u8,
 }
 
 impl Stylify for Formatter {
+    /// Returns a string representation of the formatter style.
+    ///
+    /// The `PaintType` is not any involved in this method!
     fn make_styles(&self, _paint_type: Option<&PaintType>) -> String {
         format!("{}", self.code)
     }
 }
 
+/// A macro for generating formatter constants.
 macro_rules! formatter_code {
     ($name:ident, $code:expr) => {
         pub const $name: Styles = Styles::StyleFormatter(Formatter { code: $code });
@@ -82,6 +87,7 @@ mod tests {
         }
     }
 
+    /// A macro for generating formatter tests.
     macro_rules! formatter_test {
         ($test_name:ident, $formatter_name:ident, $code:expr) => {
             #[test]
