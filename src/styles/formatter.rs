@@ -4,20 +4,26 @@ use super::{ paint_type::PaintType, Styles, Stylify };
 
 #[derive(Debug, Clone)]
 pub struct Formatter {
-    n: u8,
+    code: u8,
 }
 
 impl Stylify for Formatter {
     fn make_styles(&self, _paint_type: Option<&PaintType>) -> String {
-        format!("{}", self.n)
+        format!("{}", self.code)
     }
 }
 
-pub const RESET: Styles = Styles::StyleFormatter(Formatter { n: 0 });
-pub const BOLD: Styles = Styles::StyleFormatter(Formatter { n: 1 });
-pub const FAINT: Styles = Styles::StyleFormatter(Formatter { n: 2 });
-pub const ITALIC: Styles = Styles::StyleFormatter(Formatter { n: 3 });
-pub const UNDERLINE: Styles = Styles::StyleFormatter(Formatter { n: 4 });
-pub const SLOW_BLINK: Styles = Styles::StyleFormatter(Formatter { n: 5 });
-pub const RAPID_BLINK: Styles = Styles::StyleFormatter(Formatter { n: 6 });
-pub const OVERLINE: Styles = Styles::StyleFormatter(Formatter { n: 53 });
+macro_rules! formatter_code {
+    ($name:ident, $code:expr) => {
+        pub const $name: Styles = Styles::StyleFormatter(Formatter { code: $code });
+    };
+}
+
+formatter_code!(RESET, 0);
+formatter_code!(BOLD, 1);
+formatter_code!(FAINT, 2);
+formatter_code!(ITALIC, 3);
+formatter_code!(UNDERLINE, 4);
+formatter_code!(SLOW_BLINK, 5);
+formatter_code!(RAPID_BLINK, 6);
+formatter_code!(OVERLINE, 53);
