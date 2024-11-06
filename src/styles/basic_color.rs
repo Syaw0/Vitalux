@@ -25,12 +25,6 @@ impl Stylify for BasicColor {
 }
 
 /// A macro for generating color constants.
-///
-/// Usage:
-///
-/// ```rust
-/// color_code!(MY_COLOR, { fg: 30, bg: 40 });
-/// ```
 macro_rules! color_code {
     ($name:ident, { fg: $fg:expr, bg: $bg:expr }) => {
         pub const $name:Styles = Styles::StyleBasicColor(BasicColor { fg: $fg, bg: $bg });
