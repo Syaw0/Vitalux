@@ -19,19 +19,46 @@ impl Stylify for BasicColor {
     }
 }
 
-pub const BLACK: Styles = Styles::StyleBasicColor(BasicColor { fg: 30, bg: 40 });
-pub const RED: Styles = Styles::StyleBasicColor(BasicColor { fg: 31, bg: 41 });
-pub const GREEN: Styles = Styles::StyleBasicColor(BasicColor { fg: 32, bg: 42 });
-pub const YELLOW: Styles = Styles::StyleBasicColor(BasicColor { fg: 33, bg: 43 });
-pub const BLUE: Styles = Styles::StyleBasicColor(BasicColor { fg: 34, bg: 44 });
-pub const MAGENTA: Styles = Styles::StyleBasicColor(BasicColor { fg: 35, bg: 45 });
-pub const CYAN: Styles = Styles::StyleBasicColor(BasicColor { fg: 36, bg: 46 });
-pub const WHITE: Styles = Styles::StyleBasicColor(BasicColor { fg: 37, bg: 47 });
-pub const GRAY: Styles = Styles::StyleBasicColor(BasicColor { fg: 90, bg: 10 });
-pub const BRIGHT_RED: Styles = Styles::StyleBasicColor(BasicColor { fg: 91, bg: 101 });
-pub const BRIGHT_GREEN: Styles = Styles::StyleBasicColor(BasicColor { fg: 92, bg: 102 });
-pub const BRIGHT_YELLOW: Styles = Styles::StyleBasicColor(BasicColor { fg: 93, bg: 103 });
-pub const BRIGHT_BLUE: Styles = Styles::StyleBasicColor(BasicColor { fg: 94, bg: 104 });
-pub const BRIGHT_MAGENTA: Styles = Styles::StyleBasicColor(BasicColor { fg: 95, bg: 105 });
-pub const BRIGHT_CYAN: Styles = Styles::StyleBasicColor(BasicColor { fg: 96, bg: 106 });
-pub const BRIGHT_WHITE: Styles = Styles::StyleBasicColor(BasicColor { fg: 97, bg: 107 });
+macro_rules! color_code {
+    ($name:ident, { fg: $fg:expr, bg: $bg:expr }) => {
+        pub const $name:Styles = Styles::StyleBasicColor(BasicColor { fg: $fg, bg: $bg });
+    };
+}
+
+color_code!(BLACK,{fg: 30, bg: 40 });
+color_code!(RED,{fg: 31, bg: 41});
+color_code!(GREEN,{ fg: 32, bg: 42 });
+color_code!(YELLOW,{ fg: 33, bg: 43 });
+color_code!(BLUE,{fg: 34, bg: 44});
+color_code!(MAGENTA,{ fg: 35, bg: 45});
+color_code!(CYAN,{fg:36,bg:46});
+color_code!(WHITE,{fg:37,bg:47});
+color_code!(GRAY,{fg:90,bg:100});
+color_code!(BRIGHT_RED,{fg:91,bg:101});
+color_code!(BRIGHT_GREEN,{fg:92,bg:102});
+color_code!(BRIGHT_YELLOW,{fg:93,bg:103});
+color_code!(BRIGHT_BLUE,{fg:94,bg:104});
+color_code!(BRIGHT_MAGENTA,{fg:95,bg:105});
+color_code!(BRIGHT_CYAN,{fg:96,bg:106});
+color_code!(BRIGHT_WHITE,{fg:97,bg:107});
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn black_color() {
+        match BLACK {
+            Styles::StyleBasicColor(BasicColor { fg: 30, bg: 40 }) => assert!(true),
+            _ => panic!("It's not a `Black` color! black color should have fg:30 and bg:40"),
+        }
+    }
+
+    #[test]
+    fn red_color() {
+        match RED {
+            Styles::StyleBasicColor(BasicColor { fg: 31, bg: 41 }) => assert!(true),
+            _ => panic!("It's not a `Red` color! red color should have fg:31 and bg:41"),
+        }
+    }
+}
