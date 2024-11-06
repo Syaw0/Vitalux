@@ -14,7 +14,7 @@ impl ANSIEscapeCode {
 // =======================================================================
 
 #[cfg(test)]
-mod ansi_escape_code_test {
+mod tests {
     use super::*;
 
     #[test]

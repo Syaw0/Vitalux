@@ -2,12 +2,12 @@
 //!
 //!
 
-mod ansi_escape_code;
+mod ansi_code;
 mod styles;
 
 // =======================================================================
 use crate::{
-    ansi_escape_code::ANSIEscapeCode,
+    ansi_code::ANSIEscapeCode,
     styles::{
         basic_color,
         formatter,
