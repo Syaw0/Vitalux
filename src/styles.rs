@@ -25,14 +25,6 @@ pub mod palette;
 ///
 /// This enum has five variants, each representing a different type of style:
 /// `StyleRgb`, `StyleBasicColor`, `StylePaletteColor`, `StylePaintType`, and `StyleFormatter`.
-///
-/// # Examples
-///
-/// ```
-/// let style = Styles::StyleRgb(Rgb::new(255, 0, 0));
-/// let paint_type = PaintType::FG;
-/// let styles = style.make_styles(Some(&paint_type));
-/// ```
 #[derive(Debug, Clone)]
 pub enum Styles {
     /// A style represented by an RGB color.
@@ -70,4 +62,56 @@ pub trait Stylify {
     /// This method takes an optional `paint_type` parameter, which is used to determine the styles to generate.
     /// It returns a string representing the generated styles.
     fn make_styles(&self, paint_type: Option<&PaintType>) -> String;
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_make_styles() {
+        let style = Styles::StyleRgb(Rgb { r: 255, g: 0, b: 0 });
+        let styles_default = style.make_styles(None);
+        let styles_fg = style.make_styles(Some(&PaintType::FG));
+        let styles_bg = style.make_styles(Some(&PaintType::BG));
+        assert_eq!(styles_default, "38;2;255;0;0");
+        assert_eq!(styles_fg, "38;2;255;0;0");
+        assert_eq!(styles_bg, "48;2;255;0;0");
+
+        //
+        let style = Styles::StyleBasicColor(BasicColor { fg: 34, bg: 44 });
+        let styles_default = style.make_styles(None);
+        let styles_fg = style.make_styles(Some(&PaintType::FG));
+        let styles_bg = style.make_styles(Some(&PaintType::BG));
+        assert_eq!(styles_default, "34");
+        assert_eq!(styles_fg, "34");
+        assert_eq!(styles_bg, "44");
+
+        //
+        let style = Styles::StylePaletteColor(PaletteColor { index: 44 });
+        let styles_default = style.make_styles(None);
+        let styles_fg = style.make_styles(Some(&PaintType::FG));
+        let styles_bg = style.make_styles(Some(&PaintType::BG));
+        assert_eq!(styles_default, "38;5;44");
+        assert_eq!(styles_fg, "38;5;44");
+        assert_eq!(styles_bg, "48;5;44");
+
+        //
+        let style = Styles::StylePaintType(PaintType::BG);
+        let styles_default = style.make_styles(None);
+        let styles_fg = style.make_styles(Some(&PaintType::FG));
+        let styles_bg = style.make_styles(Some(&PaintType::BG));
+        assert_eq!(styles_default, "");
+        assert_eq!(styles_fg, "");
+        assert_eq!(styles_bg, "");
+
+        //
+        let style = Styles::StyleFormatter(Formatter { code: 3 });
+        let styles_default = style.make_styles(None);
+        let styles_fg = style.make_styles(Some(&PaintType::FG));
+        let styles_bg = style.make_styles(Some(&PaintType::BG));
+        assert_eq!(styles_default, "3");
+        assert_eq!(styles_fg, "3");
+        assert_eq!(styles_bg, "3");
+    }
 }
