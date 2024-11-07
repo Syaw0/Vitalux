@@ -29,3 +29,34 @@ impl Stylify for PaintType {
         String::new()
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_make_styles() {
+        let paint_type = PaintType::FG;
+        let styles = paint_type.make_styles(None);
+        assert_eq!(styles, String::new());
+
+        let paint_type = PaintType::BG;
+        let styles = paint_type.make_styles(Some(&PaintType::FG));
+        assert_eq!(styles, String::new());
+    }
+
+    #[test]
+    fn test_make_styles_null_input() {
+        let paint_type = PaintType::FG;
+        let styles = paint_type.make_styles(None);
+        assert_eq!(styles, String::new());
+    }
+
+    #[test]
+    fn test_make_styles_multiple_calls() {
+        let paint_type = PaintType::FG;
+        let styles1 = paint_type.make_styles(None);
+        let styles2 = paint_type.make_styles(None);
+        assert_eq!(styles1, styles2);
+    }
+}
