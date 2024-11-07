@@ -35,3 +35,47 @@ impl Stylify for PaletteColor {
         )
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_make_style_fg() {
+        let color = PaletteColor { index: 42 };
+        let styles = color.make_styles(Some(&PaintType::FG));
+        assert_eq!(styles, "38;5;42")
+    }
+
+    #[test]
+    fn test_make_style_default_fg() {
+        let color = PaletteColor { index: 105 };
+        let styles = color.make_styles(None);
+        assert_eq!(styles, "38;5;105")
+    }
+
+    #[test]
+    fn test_make_style_bg() {
+        let color = PaletteColor { index: 1 };
+        let styles = color.make_styles(Some(&PaintType::BG));
+        assert_eq!(styles, "48;5;1")
+    }
+
+    #[test]
+    fn test_fg_and_bg_values() {
+        let color = PaletteColor { index: 200 };
+        let styles_fg = color.make_styles(Some(&PaintType::FG));
+        let styles_bg = color.make_styles(Some(&PaintType::BG));
+        assert_eq!(styles_fg, "38;5;200");
+        assert_eq!(styles_bg, "48;5;200")
+    }
+
+    #[test]
+    fn test_fg_and_bg_values_with_none_paint_type() {
+        let color = PaletteColor { index: 108 };
+        let styles_fg = color.make_styles(None);
+        let styles_bg = color.make_styles(Some(&PaintType::BG));
+        assert_eq!(styles_fg, "38;5;108");
+        assert_eq!(styles_bg, "48;5;108")
+    }
+}
