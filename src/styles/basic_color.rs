@@ -6,9 +6,9 @@ use super::{ paint_type::PaintType, Styles, Stylify };
 #[derive(Debug, Clone)]
 pub struct BasicColor {
     /// The foreground color value.
-    fg: u8,
+    pub fg: u8,
     /// The background color value.
-    bg: u8,
+    pub bg: u8,
 }
 
 impl Stylify for BasicColor {

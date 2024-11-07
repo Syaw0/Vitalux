@@ -5,7 +5,7 @@ use super::{ paint_type::PaintType, Styles, Stylify };
 /// A struct representing a Formatter with code value.
 #[derive(Debug, Clone)]
 pub struct Formatter {
-    code: u8,
+    pub code: u8,
 }
 
 impl Stylify for Formatter {
