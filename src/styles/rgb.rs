@@ -39,3 +39,47 @@ impl Stylify for Rgb {
         )
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_make_style_fg() {
+        let color = Rgb { r: 102, g: 23, b: 240 };
+        let styles = color.make_styles(Some(&PaintType::FG));
+        assert_eq!(styles, "38;2;102;23;240")
+    }
+
+    #[test]
+    fn test_make_style_default_fg() {
+        let color = Rgb { r: 2, g: 55, b: 100 };
+        let styles = color.make_styles(None);
+        assert_eq!(styles, "38;2;2;55;100")
+    }
+
+    #[test]
+    fn test_make_style_bg() {
+        let color = Rgb { r: 255, g: 255, b: 43 };
+        let styles = color.make_styles(Some(&PaintType::BG));
+        assert_eq!(styles, "48;2;255;255;43")
+    }
+
+    #[test]
+    fn test_fg_and_bg_values() {
+        let color = Rgb { r: 78, g: 32, b: 210 };
+        let styles_fg = color.make_styles(Some(&PaintType::FG));
+        let styles_bg = color.make_styles(Some(&PaintType::BG));
+        assert_eq!(styles_fg, "38;2;78;32;210");
+        assert_eq!(styles_bg, "48;2;78;32;210")
+    }
+
+    #[test]
+    fn test_fg_and_bg_values_with_none_paint_type() {
+        let color = Rgb { r: 1, g: 91, b: 58 };
+        let styles_fg = color.make_styles(None);
+        let styles_bg = color.make_styles(Some(&PaintType::BG));
+        assert_eq!(styles_fg, "38;2;1;91;58");
+        assert_eq!(styles_bg, "48;2;1;91;58")
+    }
+}
