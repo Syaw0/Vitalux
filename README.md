@@ -1,2 +1,3 @@
-# Vitalux
-Colorize Your Terminal with Vitalux: A Rust-powered Formatting Tool 
+# Term_Tools
+
+Colorize Your Terminal with Term_Tools: A Rust-powered Formatting Tool
