@@ -1,6 +1,6 @@
-//! # Vitalux: Rich API for Colorizing Terminal
+//! # Term_Tools: Rich API for Colorizing Terminal
 //!
-//! Vitalux is a Rust library that provides a rich API for colorizing terminal output.
+//! term_tools is a Rust library that provides a rich API for colorizing terminal output.
 //! It allows you to create styled text strings with various colors, effects, and formatters.
 
 mod ansi_code;
@@ -29,7 +29,7 @@ use crate::{
 /// # Examples
 ///
 /// ```
-/// use vitalux::styled;
+/// use term_tools::styled;
 ///
 /// let txt = styled("Happy Day!")
 ///     .rgb(204, 182, 122)
@@ -120,7 +120,7 @@ impl StyledText {
     ///
     /// # Example:
     /// ```
-    /// use vitalux::styled;
+    /// use term_tools::styled;
     /// let styled_text = styled("How you doing?").black().fg().red().bg().paint();
     /// ```
     /// the colors before this method will paint as foreground!
@@ -136,7 +136,7 @@ impl StyledText {
     ///
     /// # Example:
     /// ```
-    /// use vitalux::styled;
+    /// use term_tools::styled;
     /// let styled_text = styled("I'm feel Happy").bright_cyan().bg().blue().fg().paint();
     /// ```
     /// the colors before this method will paint as background!
@@ -154,7 +154,7 @@ impl StyledText {
     ///
     /// # Example:
     /// ```
-    /// use vitalux::styled;
+    /// use term_tools::styled;
     /// let styled_text = styled("Our life is what our thoughts make it.").rgb(48,118,230).paint();
     /// ```
     pub fn rgb(&mut self, r: u8, g: u8, b: u8) -> &mut Self {
@@ -166,7 +166,7 @@ impl StyledText {
     ///
     /// # Example:
     /// ```
-    /// use vitalux::styled;
+    /// use term_tools::styled;
     /// let styled_text = styled("If it is not right, do not do it. If it is not true, do not say it.").palette(132).paint();
     /// ```
     ///
@@ -180,7 +180,7 @@ impl StyledText {
     ///
     /// # Example:
     /// ```
-    /// use vitalux::styled;
+    /// use term_tools::styled;
     /// let styled_text = styled("The best revenge is to not be like your enemies.").black().paint();
     /// ```
     pub fn black(&mut self) -> &mut Self {
@@ -192,7 +192,7 @@ impl StyledText {
     ///
     /// # Example:
     /// ```
-    /// use vitalux::styled;
+    /// use term_tools::styled;
     /// let styled_text = styled("To love only what happens, what was destined. No greater harmony.").red().paint();
     /// ```
     pub fn red(&mut self) -> &mut Self {
@@ -204,7 +204,7 @@ impl StyledText {
     ///
     /// # Example:
     /// ```
-    /// use vitalux::styled;
+    /// use term_tools::styled;
     /// let styled_text = styled("Everything we hear is opinion, not a fact. Everything we see is a perspective, not the truth.").green().paint();
     /// ```
     pub fn green(&mut self) -> &mut Self {
@@ -216,7 +216,7 @@ impl StyledText {
     ///
     /// # Example:
     /// ```
-    /// use vitalux::styled;
+    /// use term_tools::styled;
     /// let styled_text = styled("The present is all we have to live in . . . or to lose.").yellow().paint();
     /// ```
     pub fn yellow(&mut self) -> &mut Self {
@@ -228,7 +228,7 @@ impl StyledText {
     ///
     /// # Example:
     /// ```
-    /// use vitalux::styled;
+    /// use term_tools::styled;
     /// let styled_text = styled("The present is all we have to live in . . . or to lose.").blue().paint();
     /// ```
     pub fn blue(&mut self) -> &mut Self {
@@ -240,7 +240,7 @@ impl StyledText {
     ///
     /// # Example:
     /// ```
-    /// use vitalux::styled;
+    /// use term_tools::styled;
     /// let styled_text = styled("The present is all we have to live in . . . or to lose.").magenta().paint();
     /// ```
     pub fn magenta(&mut self) -> &mut Self {
@@ -252,7 +252,7 @@ impl StyledText {
     ///
     /// # Example:
     /// ```
-    /// use vitalux::styled;
+    /// use term_tools::styled;
     /// let styled_text = styled("The present is all we have to live in . . . or to lose.").cyan().paint();
     /// ```
     pub fn cyan(&mut self) -> &mut Self {
@@ -264,7 +264,7 @@ impl StyledText {
     ///
     /// # Example:
     /// ```
-    /// use vitalux::styled;
+    /// use term_tools::styled;
     /// let styled_text = styled("The present is all we have to live in . . . or to lose.").white().paint();
     /// ```
     pub fn white(&mut self) -> &mut Self {
@@ -276,7 +276,7 @@ impl StyledText {
     ///
     /// # Example:
     /// ```
-    /// use vitalux::styled;
+    /// use term_tools::styled;
     /// let styled_text = styled("The present is all we have to live in . . . or to lose.").gray().paint();
     /// ```
     pub fn gray(&mut self) -> &mut Self {
@@ -288,7 +288,7 @@ impl StyledText {
     ///
     /// # Example:
     /// ```
-    /// use vitalux::styled;
+    /// use term_tools::styled;
     /// let styled_text = styled("The present is all we have to live in . . . or to lose.").bright_red().paint();
     /// ```
     pub fn bright_red(&mut self) -> &mut Self {
@@ -300,7 +300,7 @@ impl StyledText {
     ///
     /// # Example:
     /// ```
-    /// use vitalux::styled;
+    /// use term_tools::styled;
     /// let styled_text = styled("The present is all we have to live in . . . or to lose.").bright_green().paint();
     /// ```
     pub fn bright_green(&mut self) -> &mut Self {
@@ -312,7 +312,7 @@ impl StyledText {
     ///
     /// # Example:
     /// ```
-    /// use vitalux::styled;
+    /// use term_tools::styled;
     /// let styled_text = styled("The present is all we have to live in . . . or to lose.").bright_yellow().paint();
     /// ```
     pub fn bright_yellow(&mut self) -> &mut Self {
@@ -324,7 +324,7 @@ impl StyledText {
     ///
     /// # Example:
     /// ```
-    /// use vitalux::styled;
+    /// use term_tools::styled;
     /// let styled_text = styled("The present is all we have to live in . . . or to lose.").bright_blue().paint();
     /// ```
     pub fn bright_blue(&mut self) -> &mut Self {
@@ -336,10 +336,10 @@ impl StyledText {
     ///
     /// # Example:
     /// ```
-    /// use vitalux::styled;
+    /// use term_tools::styled;
     /// let styled_text = styled("The present is all we have to live in . . . or to lose.").bright_magenta().paint();
     /// ```
-    /// use vitalux::styled;
+    /// use term_tools::styled;
     pub fn bright_magenta(&mut self) -> &mut Self {
         self.start_styles.push(basic_color::BRIGHT_MAGENTA);
         self
@@ -349,7 +349,7 @@ impl StyledText {
     ///
     /// # Example:
     /// ```
-    /// use vitalux::styled;
+    /// use term_tools::styled;
     /// let styled_text = styled("The present is all we have to live in . . . or to lose.").bright_cyan().paint();
     /// ```
     pub fn bright_cyan(&mut self) -> &mut Self {
@@ -361,7 +361,7 @@ impl StyledText {
     ///
     /// # Example:
     /// ```
-    /// use vitalux::styled;
+    /// use term_tools::styled;
     /// let styled_text = styled("The present is all we have to live in . . . or to lose.").bright_white().paint();
     /// ```
     pub fn bright_white(&mut self) -> &mut Self {
@@ -375,7 +375,7 @@ impl StyledText {
     ///
     /// # Example:
     /// ```
-    /// use vitalux::styled;
+    /// use term_tools::styled;
     /// let styled_text = styled("The present is all we have to live in . . . or to lose.").red().reset().paint();
     /// ```
     /// ** this will reset all the effects, colors and formatters that are called before this**
@@ -389,7 +389,7 @@ impl StyledText {
     ///
     /// # Example:
     /// ```
-    /// use vitalux::styled;
+    /// use term_tools::styled;
     /// let styled_text = styled("The present is all we have to live in . . . or to lose.").bold().paint();
     /// ```
     pub fn bold(&mut self) -> &mut Self {
@@ -401,7 +401,7 @@ impl StyledText {
     ///
     /// # Example:
     /// ```
-    /// use vitalux::styled;
+    /// use term_tools::styled;
     /// let styled_text = styled("The present is all we have to live in . . . or to lose.").faint().paint();
     /// ```
     pub fn faint(&mut self) -> &mut Self {
@@ -413,7 +413,7 @@ impl StyledText {
     ///
     /// # Example:
     /// ```
-    /// use vitalux::styled;
+    /// use term_tools::styled;
     /// let styled_text = styled("The present is all we have to live in . . . or to lose.").italic().paint();
     /// ```
     pub fn italic(&mut self) -> &mut Self {
@@ -425,7 +425,7 @@ impl StyledText {
     ///
     /// # Example:
     /// ```
-    /// use vitalux::styled;
+    /// use term_tools::styled;
     /// let styled_text = styled("The present is all we have to live in . . . or to lose.").underline().paint();
     /// ```
     pub fn underline(&mut self) -> &mut Self {
@@ -437,7 +437,7 @@ impl StyledText {
     ///
     /// # Example:
     /// ```
-    /// use vitalux::styled;
+    /// use term_tools::styled;
     /// let styled_text = styled("The present is all we have to live in . . . or to lose.").slow_blink().paint();
     /// ```
     ///
@@ -451,7 +451,7 @@ impl StyledText {
     ///
     /// # Example:
     /// ```
-    /// use vitalux::styled;
+    /// use term_tools::styled;
     /// let styled_text = styled("The present is all we have to live in . . . or to lose.").rapid_blink().paint();
     /// ```
     ///
@@ -465,7 +465,7 @@ impl StyledText {
     ///
     /// # Example:
     /// ```
-    /// use vitalux::styled;
+    /// use term_tools::styled;
     /// let styled_text = styled("The present is all we have to live in . . . or to lose.").overline().paint();
     /// ```
     pub fn overline(&mut self) -> &mut Self {

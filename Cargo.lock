@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "vitalux"
+name = "term_tools"
 version = "0.1.0"

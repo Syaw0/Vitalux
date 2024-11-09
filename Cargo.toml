@@ -1,13 +1,13 @@
 [package]
-name = "vitalux"
+name = "term_tools"
 version = "0.1.0"
 edition = "2021"
-description = "Colorize Your Terminal with Vitalux: A Rust-powered Formatting Tool"
+description = "Colorize Your Terminal with Term-Tools: A Rust-powered Formatting Tool"
 authors = ["Siavash Siamhb7@protonmail.com"]
-homepage = "https://crates.io/crates/vitalux"
-repository = "https://github.com/Syaw0/Vitalux"
+homepage = "https://crates.io/crates/term_tools"
+repository = "https://github.com/Syaw0/term_tools"
 license-file = "./LICENSE"
 keywords = ["cli","terminal","rust","tool","coloize","formatter"]
-categories = ["terminal","cli","command-line-utilitise"]
+categories = ["terminal","cli","command-line-utilitise","term-style", "terminal style"]
 
 [dependencies]
