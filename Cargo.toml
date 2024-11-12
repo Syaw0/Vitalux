@@ -7,7 +7,7 @@ authors = ["Siavash Siamhb7@protonmail.com"]
 homepage = "https://crates.io/crates/term_tools"
 repository = "https://github.com/Syaw0/term_tools"
 license-file = "./LICENSE"
-keywords = ["cli","terminal","rust","tool","coloize","formatter"]
-categories = ["terminal","cli","command-line-utilitise","term-style", "terminal style"]
+keywords = ["cli","terminal","rust","tool","coloize"]
+categories = ["command-line-interface","command-line-utilities"]
 
 [dependencies]
