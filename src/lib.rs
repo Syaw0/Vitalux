@@ -9,6 +9,8 @@ mod styles;
 
 // =======================================================================
 
+use into_styles::IntoStyled;
+
 use crate::{
     ansi_code::ANSIEscapeCode,
     styles::{
@@ -65,8 +67,8 @@ use crate::{
 /// # Returns
 ///
 /// A `StyledText` object that can be printed or used in other contexts.
-pub fn styled(text: &str) -> StyledText {
-    StyledText::new(text.to_string())
+pub fn styled<S: IntoStyled>(text: S) -> StyledText {
+    text.styled()
 }
 
 /// A struct representing a styled text string.
