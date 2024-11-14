@@ -4,6 +4,7 @@
 //! It allows you to create styled text strings with various colors, effects, and formatters.
 
 mod ansi_code;
+mod into_styles;
 mod styles;
 
 // =======================================================================
