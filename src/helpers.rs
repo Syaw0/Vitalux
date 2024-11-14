@@ -3,7 +3,7 @@
 
 // =======================================================================
 
-use crate::StyledText;
+use crate::{styles::Styles, StyledText};
 
 // =======================================================================
 
@@ -64,6 +64,16 @@ pub trait IntoStyled {
 impl<T: Into<String>> IntoStyled for T {
     fn styled(self) -> StyledText {
         StyledText::new(self.into())
+    }
+}
+
+pub trait IntoStyle {
+    fn into_style(self) -> Styles;
+}
+
+impl<T: Into<Styles>> IntoStyle for T {
+    fn into_style(self) -> Styles {
+        self.into()
     }
 }
 

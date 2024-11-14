@@ -3,7 +3,7 @@
 
 // =======================================================================
 
-use super::{paint_type::PaintType, Styles, Stylify};
+use super::{paint_type::PaintType, Stylify};
 
 // =======================================================================
 
@@ -35,7 +35,7 @@ impl Stylify for BasicColor {
 /// A macro for generating color constants.
 macro_rules! color_code {
     ($name:ident, { fg: $fg:expr, bg: $bg:expr }) => {
-        pub const $name: Styles = Styles::StyleBasicColor(BasicColor { fg: $fg, bg: $bg });
+        pub const $name: BasicColor = BasicColor { fg: $fg, bg: $bg };
     };
 }
 
@@ -103,11 +103,10 @@ mod tests {
     fn test_color_code_macro() {
         color_code!(TEST_COLOR,{fg:100,bg:200});
         match TEST_COLOR {
-            Styles::StyleBasicColor(BasicColor { fg, bg }) => {
+            BasicColor { fg, bg } => {
                 assert_eq!(fg, 100);
                 assert_eq!(bg, 200);
             }
-            _ => panic!("TEST_COLOR is not a BasicColor"),
         }
     }
 
@@ -116,12 +115,9 @@ mod tests {
             #[test]
             fn $test_name() {
                 match $color_name {
-                    Styles::StyleBasicColor(BasicColor { fg, bg }) => {
+                    BasicColor { fg, bg } => {
                         assert_eq!(fg, $fg);
                         assert_eq!(bg, $bg);
-                    }
-                    _ => {
-                        panic!("This color is not a basic color!");
                     }
                 }
             }

@@ -4,12 +4,16 @@
 //! It allows you to create styled text strings with various colors, effects, and formatters.
 
 mod ansi_code;
-mod into_styles;
+mod helpers;
+pub mod prelude;
 mod styles;
 
 // =======================================================================
 
-use into_styles::IntoStyled;
+use std::fmt::Display;
+
+use helpers::{IntoStyle, IntoStyled};
+use styles::{basic_color::BasicColor, formatter::Formatter};
 
 use crate::{
     ansi_code::ANSIEscapeCode,
@@ -77,6 +81,12 @@ pub struct StyledText {
     start_styles: Vec<Styles>,
 }
 
+impl Display for StyledText {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        self._fmt(f)
+    }
+}
+
 impl StyledText {
     /// Creates a new `StyledText` object with the given text.
     fn new(text: String) -> Self {
@@ -86,10 +96,7 @@ impl StyledText {
         }
     }
 
-    /// Paints the styled text string with the given styles.
-    ///
-    /// This method returns a string representing the styled text.
-    pub fn paint(&mut self) -> String {
+    fn _fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let mut default_paint_type = PaintType::FG;
 
         let start_codes_list: Vec<String> = self
@@ -97,7 +104,7 @@ impl StyledText {
             .iter()
             .rev()
             .filter_map(|s| {
-                if let Styles::StylePaintType(p) = s {
+                if let Styles::PaintType(p) = s {
                     default_paint_type = p.clone();
                     return None;
                 }
@@ -109,10 +116,25 @@ impl StyledText {
             .rev()
             .collect();
         let start_codes = start_codes_list.join("");
-        let end_codes =
-            ANSIEscapeCode::new(&formatter::RESET.make_styles(Some(&default_paint_type))).code();
+        let end_codes = ANSIEscapeCode::new(
+            &Styles::Formatter(formatter::RESET).make_styles(Some(&default_paint_type)),
+        )
+        .code();
 
-        format!("{}{}{}", start_codes, self.text, end_codes)
+        write!(f, "{}{}{}", start_codes, self.text, end_codes)
+    }
+
+    /// Paints the styled text string with the given styles.
+    ///
+    /// This method returns a string representing the styled text.
+    pub fn paint(&self) -> String {
+        self.to_string()
+    }
+
+    /// Pushes an style.
+    pub fn push<S: IntoStyle>(&mut self, style: S) -> &mut Self {
+        self.start_styles.push(style.into_style());
+        self
     }
 
     /// Sets the foreground color of the colors you have called.
@@ -127,9 +149,7 @@ impl StyledText {
     /// as background color
     /// **if the one `fg` call, all the colors will paint as foreground no matter there is before or after `fg`**
     pub fn fg(&mut self) -> &mut Self {
-        self.start_styles
-            .push(Styles::StylePaintType(PaintType::FG));
-        self
+        self.push(PaintType::FG)
     }
 
     /// Sets the background color of the colors you have called.
@@ -144,9 +164,7 @@ impl StyledText {
     /// as foreground color
     /// **if the one `bg` call, all the colors will paint as background no matter there is before or after `bg`**
     pub fn bg(&mut self) -> &mut Self {
-        self.start_styles
-            .push(Styles::StylePaintType(PaintType::BG));
-        self
+        self.push(PaintType::BG)
     }
 
     // Colors
@@ -159,8 +177,7 @@ impl StyledText {
     /// let styled_text = styled("Our life is what our thoughts make it.").rgb(48,118,230).paint();
     /// ```
     pub fn rgb(&mut self, r: u8, g: u8, b: u8) -> &mut Self {
-        self.start_styles.push(Styles::StyleRgb(Rgb { r, g, b }));
-        self
+        self.push(Rgb { r, g, b })
     }
 
     /// Sets the `palette` color to the input text.
@@ -173,9 +190,12 @@ impl StyledText {
     ///
     /// the index should be 8 bit color between 0 to 255.
     pub fn palette(&mut self, index: u8) -> &mut Self {
-        self.start_styles
-            .push(Styles::StylePaletteColor(PaletteColor { index }));
-        self
+        self.push(PaletteColor { index })
+    }
+
+    /// Sets the given color to the input text.
+    pub fn color<C: Into<BasicColor>>(&mut self, color: C) -> &mut Self {
+        self.push(color.into())
     }
 
     /// Sets the `black` color to the input text.
@@ -186,8 +206,7 @@ impl StyledText {
     /// let styled_text = styled("The best revenge is to not be like your enemies.").black().paint();
     /// ```
     pub fn black(&mut self) -> &mut Self {
-        self.start_styles.push(basic_color::BLACK);
-        self
+        self.color(basic_color::BLACK)
     }
 
     /// Sets the `red` color to the input text.
@@ -198,8 +217,7 @@ impl StyledText {
     /// let styled_text = styled("To love only what happens, what was destined. No greater harmony.").red().paint();
     /// ```
     pub fn red(&mut self) -> &mut Self {
-        self.start_styles.push(basic_color::RED);
-        self
+        self.color(basic_color::RED)
     }
 
     /// Sets the `green` color to the input text.
@@ -210,8 +228,7 @@ impl StyledText {
     /// let styled_text = styled("Everything we hear is opinion, not a fact. Everything we see is a perspective, not the truth.").green().paint();
     /// ```
     pub fn green(&mut self) -> &mut Self {
-        self.start_styles.push(basic_color::GREEN);
-        self
+        self.color(basic_color::GREEN)
     }
 
     /// Sets the `yellow` color to the input text.
@@ -222,8 +239,7 @@ impl StyledText {
     /// let styled_text = styled("The present is all we have to live in . . . or to lose.").yellow().paint();
     /// ```
     pub fn yellow(&mut self) -> &mut Self {
-        self.start_styles.push(basic_color::YELLOW);
-        self
+        self.color(basic_color::YELLOW)
     }
 
     /// Sets the `blue` color to the input text.
@@ -234,8 +250,7 @@ impl StyledText {
     /// let styled_text = styled("The present is all we have to live in . . . or to lose.").blue().paint();
     /// ```
     pub fn blue(&mut self) -> &mut Self {
-        self.start_styles.push(basic_color::BLUE);
-        self
+        self.color(basic_color::BLUE)
     }
 
     /// Sets the `magenta` color to the input text.
@@ -246,8 +261,7 @@ impl StyledText {
     /// let styled_text = styled("The present is all we have to live in . . . or to lose.").magenta().paint();
     /// ```
     pub fn magenta(&mut self) -> &mut Self {
-        self.start_styles.push(basic_color::MAGENTA);
-        self
+        self.color(basic_color::MAGENTA)
     }
 
     /// Sets the `cyan` color to the input text.
@@ -258,8 +272,7 @@ impl StyledText {
     /// let styled_text = styled("The present is all we have to live in . . . or to lose.").cyan().paint();
     /// ```
     pub fn cyan(&mut self) -> &mut Self {
-        self.start_styles.push(basic_color::CYAN);
-        self
+        self.color(basic_color::CYAN)
     }
 
     /// Sets the `white` color to the input text.
@@ -270,8 +283,7 @@ impl StyledText {
     /// let styled_text = styled("The present is all we have to live in . . . or to lose.").white().paint();
     /// ```
     pub fn white(&mut self) -> &mut Self {
-        self.start_styles.push(basic_color::WHITE);
-        self
+        self.color(basic_color::WHITE)
     }
 
     /// Sets the `gray` color to the input text.
@@ -282,8 +294,7 @@ impl StyledText {
     /// let styled_text = styled("The present is all we have to live in . . . or to lose.").gray().paint();
     /// ```
     pub fn gray(&mut self) -> &mut Self {
-        self.start_styles.push(basic_color::GRAY);
-        self
+        self.color(basic_color::GRAY)
     }
 
     /// Sets the `bright_red` color to the input text.
@@ -294,8 +305,7 @@ impl StyledText {
     /// let styled_text = styled("The present is all we have to live in . . . or to lose.").bright_red().paint();
     /// ```
     pub fn bright_red(&mut self) -> &mut Self {
-        self.start_styles.push(basic_color::BRIGHT_RED);
-        self
+        self.color(basic_color::BRIGHT_RED)
     }
 
     /// Sets the `bright_green` color to the input text.
@@ -306,8 +316,7 @@ impl StyledText {
     /// let styled_text = styled("The present is all we have to live in . . . or to lose.").bright_green().paint();
     /// ```
     pub fn bright_green(&mut self) -> &mut Self {
-        self.start_styles.push(basic_color::BRIGHT_GREEN);
-        self
+        self.color(basic_color::BRIGHT_GREEN)
     }
 
     /// Sets the `bright_yellow` color to the input text.
@@ -318,8 +327,7 @@ impl StyledText {
     /// let styled_text = styled("The present is all we have to live in . . . or to lose.").bright_yellow().paint();
     /// ```
     pub fn bright_yellow(&mut self) -> &mut Self {
-        self.start_styles.push(basic_color::BRIGHT_YELLOW);
-        self
+        self.color(basic_color::BRIGHT_YELLOW)
     }
 
     /// Sets the `bright_blue` color to the input text.
@@ -330,8 +338,7 @@ impl StyledText {
     /// let styled_text = styled("The present is all we have to live in . . . or to lose.").bright_blue().paint();
     /// ```
     pub fn bright_blue(&mut self) -> &mut Self {
-        self.start_styles.push(basic_color::BRIGHT_BLUE);
-        self
+        self.color(basic_color::BRIGHT_BLUE)
     }
 
     /// Sets the `bright_magenta` color to the input text.
@@ -343,8 +350,7 @@ impl StyledText {
     /// ```
     /// use term_tools::styled;
     pub fn bright_magenta(&mut self) -> &mut Self {
-        self.start_styles.push(basic_color::BRIGHT_MAGENTA);
-        self
+        self.color(basic_color::BRIGHT_MAGENTA)
     }
 
     /// Sets the `bright_cyan` color to the input text.
@@ -355,8 +361,7 @@ impl StyledText {
     /// let styled_text = styled("The present is all we have to live in . . . or to lose.").bright_cyan().paint();
     /// ```
     pub fn bright_cyan(&mut self) -> &mut Self {
-        self.start_styles.push(basic_color::BRIGHT_CYAN);
-        self
+        self.color(basic_color::BRIGHT_CYAN)
     }
 
     /// Sets the `bright_white` color to the input text.
@@ -367,11 +372,15 @@ impl StyledText {
     /// let styled_text = styled("The present is all we have to live in . . . or to lose.").bright_white().paint();
     /// ```
     pub fn bright_white(&mut self) -> &mut Self {
-        self.start_styles.push(basic_color::BRIGHT_WHITE);
-        self
+        self.color(basic_color::BRIGHT_WHITE)
     }
 
     // Formatters
+
+    /// Sets the given format to the input text.
+    pub fn format<F: Into<Formatter>>(&mut self, format: F) -> &mut Self {
+        self.push(format.into())
+    }
 
     /// Sets the `reset` effect to the input text.
     ///
@@ -383,8 +392,7 @@ impl StyledText {
     /// ** this will reset all the effects, colors and formatters that are called before this**
     /// so in the top example the red color will never applied to the input text
     pub fn reset(&mut self) -> &mut Self {
-        self.start_styles.push(formatter::RESET);
-        self
+        self.format(formatter::RESET)
     }
 
     /// Sets the `bold` format to the input text.
@@ -395,8 +403,7 @@ impl StyledText {
     /// let styled_text = styled("The present is all we have to live in . . . or to lose.").bold().paint();
     /// ```
     pub fn bold(&mut self) -> &mut Self {
-        self.start_styles.push(formatter::BOLD);
-        self
+        self.format(formatter::BOLD)
     }
 
     /// Sets the `faint` format to the input text.
@@ -407,8 +414,7 @@ impl StyledText {
     /// let styled_text = styled("The present is all we have to live in . . . or to lose.").faint().paint();
     /// ```
     pub fn faint(&mut self) -> &mut Self {
-        self.start_styles.push(formatter::FAINT);
-        self
+        self.format(formatter::FAINT)
     }
 
     /// Sets the `italic` format to the input text.
@@ -419,8 +425,7 @@ impl StyledText {
     /// let styled_text = styled("The present is all we have to live in . . . or to lose.").italic().paint();
     /// ```
     pub fn italic(&mut self) -> &mut Self {
-        self.start_styles.push(formatter::ITALIC);
-        self
+        self.format(formatter::ITALIC)
     }
 
     /// Sets the `underline` format to the input text.
@@ -431,8 +436,7 @@ impl StyledText {
     /// let styled_text = styled("The present is all we have to live in . . . or to lose.").underline().paint();
     /// ```
     pub fn underline(&mut self) -> &mut Self {
-        self.start_styles.push(formatter::UNDERLINE);
-        self
+        self.format(formatter::UNDERLINE)
     }
 
     /// Sets the `slow_blink` effect to the input text.
@@ -445,8 +449,7 @@ impl StyledText {
     ///
     /// **base on the terminal you are using this could not be applied**
     pub fn slow_blink(&mut self) -> &mut Self {
-        self.start_styles.push(formatter::SLOW_BLINK);
-        self
+        self.format(formatter::SLOW_BLINK)
     }
 
     /// Sets the `rapid_blink` effect to the input text.
@@ -459,8 +462,7 @@ impl StyledText {
     ///
     /// **base on the terminal you are using this could not be applied**
     pub fn rapid_blink(&mut self) -> &mut Self {
-        self.start_styles.push(formatter::RAPID_BLINK);
-        self
+        self.format(formatter::RAPID_BLINK)
     }
 
     /// Sets the `overline` effect to the input text.
@@ -471,7 +473,6 @@ impl StyledText {
     /// let styled_text = styled("The present is all we have to live in . . . or to lose.").overline().paint();
     /// ```
     pub fn overline(&mut self) -> &mut Self {
-        self.start_styles.push(formatter::OVERLINE);
-        self
+        self.format(formatter::OVERLINE)
     }
 }

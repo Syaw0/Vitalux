@@ -27,15 +27,15 @@ pub mod rgb;
 #[derive(Debug, Clone)]
 pub enum Styles {
     /// A style represented by an RGB color.
-    StyleRgb(Rgb),
+    Rgb(Rgb),
     /// A style represented by a basic color.
-    StyleBasicColor(BasicColor),
+    BasicColor(BasicColor),
     /// A style represented by a palette color.
-    StylePaletteColor(PaletteColor),
+    PaletteColor(PaletteColor),
     /// A style represented by a paint type.
-    StylePaintType(PaintType),
+    PaintType(PaintType),
     /// A style represented by a formatter.
-    StyleFormatter(Formatter),
+    Formatter(Formatter),
 }
 
 impl Styles {
@@ -45,12 +45,42 @@ impl Styles {
     /// It returns a string representing the generated styles.
     pub fn make_styles(&self, paint_type: Option<&PaintType>) -> String {
         match self {
-            Styles::StyleBasicColor(c) => c.make_styles(paint_type),
-            Styles::StylePaintType(c) => c.make_styles(paint_type),
-            Styles::StylePaletteColor(c) => c.make_styles(paint_type),
-            Styles::StyleRgb(c) => c.make_styles(paint_type),
-            Styles::StyleFormatter(c) => c.make_styles(paint_type),
+            Styles::BasicColor(c) => c.make_styles(paint_type),
+            Styles::PaintType(c) => c.make_styles(paint_type),
+            Styles::PaletteColor(c) => c.make_styles(paint_type),
+            Styles::Rgb(c) => c.make_styles(paint_type),
+            Styles::Formatter(c) => c.make_styles(paint_type),
         }
+    }
+}
+
+impl Into<Styles> for Rgb {
+    fn into(self) -> Styles {
+        Styles::Rgb(self)
+    }
+}
+
+impl Into<Styles> for BasicColor {
+    fn into(self) -> Styles {
+        Styles::BasicColor(self)
+    }
+}
+
+impl Into<Styles> for PaletteColor {
+    fn into(self) -> Styles {
+        Styles::PaletteColor(self)
+    }
+}
+
+impl Into<Styles> for PaintType {
+    fn into(self) -> Styles {
+        Styles::PaintType(self)
+    }
+}
+
+impl Into<Styles> for Formatter {
+    fn into(self) -> Styles {
+        Styles::Formatter(self)
     }
 }
 
@@ -69,7 +99,7 @@ mod tests {
 
     #[test]
     fn test_make_styles() {
-        let style = Styles::StyleRgb(Rgb { r: 255, g: 0, b: 0 });
+        let style = Styles::Rgb(Rgb { r: 255, g: 0, b: 0 });
         let styles_default = style.make_styles(None);
         let styles_fg = style.make_styles(Some(&PaintType::FG));
         let styles_bg = style.make_styles(Some(&PaintType::BG));
@@ -78,7 +108,7 @@ mod tests {
         assert_eq!(styles_bg, "48;2;255;0;0");
 
         //
-        let style = Styles::StyleBasicColor(BasicColor { fg: 34, bg: 44 });
+        let style = Styles::BasicColor(BasicColor { fg: 34, bg: 44 });
         let styles_default = style.make_styles(None);
         let styles_fg = style.make_styles(Some(&PaintType::FG));
         let styles_bg = style.make_styles(Some(&PaintType::BG));
@@ -87,7 +117,7 @@ mod tests {
         assert_eq!(styles_bg, "44");
 
         //
-        let style = Styles::StylePaletteColor(PaletteColor { index: 44 });
+        let style = Styles::PaletteColor(PaletteColor { index: 44 });
         let styles_default = style.make_styles(None);
         let styles_fg = style.make_styles(Some(&PaintType::FG));
         let styles_bg = style.make_styles(Some(&PaintType::BG));
@@ -96,7 +126,7 @@ mod tests {
         assert_eq!(styles_bg, "48;5;44");
 
         //
-        let style = Styles::StylePaintType(PaintType::BG);
+        let style = Styles::PaintType(PaintType::BG);
         let styles_default = style.make_styles(None);
         let styles_fg = style.make_styles(Some(&PaintType::FG));
         let styles_bg = style.make_styles(Some(&PaintType::BG));
@@ -105,7 +135,7 @@ mod tests {
         assert_eq!(styles_bg, "");
 
         //
-        let style = Styles::StyleFormatter(Formatter { code: 3 });
+        let style = Styles::Formatter(Formatter { code: 3 });
         let styles_default = style.make_styles(None);
         let styles_fg = style.make_styles(Some(&PaintType::FG));
         let styles_bg = style.make_styles(Some(&PaintType::BG));
