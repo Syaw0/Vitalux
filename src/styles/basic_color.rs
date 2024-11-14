@@ -1,4 +1,9 @@
-use super::{ paint_type::PaintType, Styles, Stylify };
+//!
+//!
+
+// =======================================================================
+
+use super::{paint_type::PaintType, Stylify};
 
 // =======================================================================
 
@@ -17,17 +22,20 @@ impl Stylify for BasicColor {
     /// If `paint_type` is `None`, the foreground color is assumed.
     fn make_styles(&self, paint_type: Option<&PaintType>) -> String {
         let paint_type = paint_type.unwrap_or(&PaintType::FG);
-        format!("{}", match paint_type {
-            PaintType::FG => self.fg,
-            PaintType::BG => self.bg,
-        })
+        format!(
+            "{}",
+            match paint_type {
+                PaintType::FG => self.fg,
+                PaintType::BG => self.bg,
+            }
+        )
     }
 }
 
 /// A macro for generating color constants.
 macro_rules! color_code {
     ($name:ident, { fg: $fg:expr, bg: $bg:expr }) => {
-        pub const $name:Styles = Styles::StyleBasicColor(BasicColor { fg: $fg, bg: $bg });
+        pub const $name: BasicColor = BasicColor { fg: $fg, bg: $bg };
     };
 }
 
@@ -95,25 +103,21 @@ mod tests {
     fn test_color_code_macro() {
         color_code!(TEST_COLOR,{fg:100,bg:200});
         match TEST_COLOR {
-            Styles::StyleBasicColor(BasicColor { fg, bg }) => {
+            BasicColor { fg, bg } => {
                 assert_eq!(fg, 100);
                 assert_eq!(bg, 200);
             }
-            _ => panic!("TEST_COLOR is not a BasicColor"),
         }
     }
 
     macro_rules! color_test {
         ($test_name:ident, $color_name:ident, $color:expr, $fg:expr, $bg:expr) => {
             #[test]
-            fn $test_name(){
-                match $color_name{
-                    Styles::StyleBasicColor(BasicColor{fg,bg})=>{
-                        assert_eq!(fg,$fg);
-                        assert_eq!(bg,$bg);
-                    },
-                    _=>{
-                        panic!("This color is not a basic color!"); 
+            fn $test_name() {
+                match $color_name {
+                    BasicColor { fg, bg } => {
+                        assert_eq!(fg, $fg);
+                        assert_eq!(bg, $bg);
                     }
                 }
             }
@@ -133,7 +137,13 @@ mod tests {
     color_test!(bright_green_color, BRIGHT_GREEN, "Bright Green", 92, 102);
     color_test!(bright_yellow_color, BRIGHT_YELLOW, "Bright Yellow", 93, 103);
     color_test!(bright_blue_color, BRIGHT_BLUE, "Bright Blue", 94, 104);
-    color_test!(bright_magenta_color, BRIGHT_MAGENTA, "Bright Magenta", 95, 105);
+    color_test!(
+        bright_magenta_color,
+        BRIGHT_MAGENTA,
+        "Bright Magenta",
+        95,
+        105
+    );
     color_test!(bright_cyan_color, BRIGHT_CYAN, "Bright Cyan", 96, 106);
     color_test!(bright_white_color, BRIGHT_WHITE, "Bright White", 97, 107);
 }

@@ -1,13 +1,13 @@
-/// A module for creating rgb color.
-///
-/// This module provides an struct `Rgb`
-/// that represents rgb color, with r,g,b field.
-/// It also implements the `Stylify` trait for `Rgb`,
-/// which allows for generating styles based on the paint type.
+//! A module for creating rgb color.
+//!
+//! This module provides an struct `Rgb`
+//! that represents rgb color, with r,g,b field.
+//! It also implements the `Stylify` trait for `Rgb`,
+//! which allows for generating styles based on the paint type.
 
 // =======================================================================
 
-use super::{ paint_type::PaintType, Stylify };
+use super::{paint_type::PaintType, Stylify};
 
 // =======================================================================
 
@@ -46,28 +46,44 @@ mod tests {
 
     #[test]
     fn test_make_style_fg() {
-        let color = Rgb { r: 102, g: 23, b: 240 };
+        let color = Rgb {
+            r: 102,
+            g: 23,
+            b: 240,
+        };
         let styles = color.make_styles(Some(&PaintType::FG));
         assert_eq!(styles, "38;2;102;23;240")
     }
 
     #[test]
     fn test_make_style_default_fg() {
-        let color = Rgb { r: 2, g: 55, b: 100 };
+        let color = Rgb {
+            r: 2,
+            g: 55,
+            b: 100,
+        };
         let styles = color.make_styles(None);
         assert_eq!(styles, "38;2;2;55;100")
     }
 
     #[test]
     fn test_make_style_bg() {
-        let color = Rgb { r: 255, g: 255, b: 43 };
+        let color = Rgb {
+            r: 255,
+            g: 255,
+            b: 43,
+        };
         let styles = color.make_styles(Some(&PaintType::BG));
         assert_eq!(styles, "48;2;255;255;43")
     }
 
     #[test]
     fn test_fg_and_bg_values() {
-        let color = Rgb { r: 78, g: 32, b: 210 };
+        let color = Rgb {
+            r: 78,
+            g: 32,
+            b: 210,
+        };
         let styles_fg = color.make_styles(Some(&PaintType::FG));
         let styles_bg = color.make_styles(Some(&PaintType::BG));
         assert_eq!(styles_fg, "38;2;78;32;210");

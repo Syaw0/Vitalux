@@ -1,4 +1,9 @@
-use super::{ paint_type::PaintType, Styles, Stylify };
+//!
+//!
+
+// =======================================================================
+
+use super::{paint_type::PaintType, Stylify};
 
 // =======================================================================
 
@@ -20,7 +25,7 @@ impl Stylify for Formatter {
 /// A macro for generating formatter constants.
 macro_rules! formatter_code {
     ($name:ident, $code:expr) => {
-        pub const $name: Styles = Styles::StyleFormatter(Formatter { code: $code });
+        pub const $name: Formatter = Formatter { code: $code };
     };
 }
 
@@ -80,10 +85,9 @@ mod tests {
     fn test_formatter_code_macro() {
         formatter_code!(TEST_FORMATTER, 103);
         match TEST_FORMATTER {
-            Styles::StyleFormatter(Formatter { code }) => {
+            Formatter { code } => {
                 assert_eq!(code, 103);
             }
-            _ => panic!("TEST_FORMATTER is not a Formatter"),
         }
     }
 
@@ -91,13 +95,10 @@ mod tests {
     macro_rules! formatter_test {
         ($test_name:ident, $formatter_name:ident, $code:expr) => {
             #[test]
-            fn $test_name(){
-                match $formatter_name{
-                    Styles::StyleFormatter(Formatter{code})=>{
-                        assert_eq!(code,$code);
-                    },
-                    _=>{
-                        panic!("This formatter is not a Formatter!"); 
+            fn $test_name() {
+                match $formatter_name {
+                    Formatter { code } => {
+                        assert_eq!(code, $code);
                     }
                 }
             }

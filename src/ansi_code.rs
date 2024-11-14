@@ -1,9 +1,9 @@
-/// A module for creating ansi escape code.
-///
-/// This module provides an struct `ANSIEscapeCode`
-/// that represents ansi escape code, with `parameter` field.
-/// It also implements the `ANSIEscapeCode`, with `new` and `code` method
-/// which allows for generating anis escape code and getting a code.
+//! A module for creating ansi escape code.
+//!
+//! This module provides an struct `ANSIEscapeCode`
+//! that represents ansi escape code, with `parameter` field.
+//! It also implements the `ANSIEscapeCode`, with `new` and `code` method
+//! which allows for generating anis escape code and getting a code.
 
 // =======================================================================
 
@@ -13,10 +13,13 @@
 pub struct ANSIEscapeCode {
     parameter: String,
 }
+
 impl ANSIEscapeCode {
     /// Returns a ANSIEscapeCode instance with parameter .
     pub fn new(parameter: &str) -> Self {
-        ANSIEscapeCode { parameter: parameter.to_string() }
+        ANSIEscapeCode {
+            parameter: parameter.to_string(),
+        }
     }
 
     /// Returns a String that represent the ansi code.

@@ -1,7 +1,7 @@
-/// A module for working with paint types.
-///
-/// This module provides an enum `PaintType` that represents different types of paint.
-/// It also implements the `Stylify` trait for `PaintType`, which allows for generating styles based on the paint type.
+//! A module for working with paint types.
+//!
+//! This module provides an enum `PaintType` that represents different types of paint.
+//! It also implements the `Stylify` trait for `PaintType`, which allows for generating styles based on the paint type.
 
 // =======================================================================
 

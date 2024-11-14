@@ -1,13 +1,13 @@
-/// A module for creating palette color.
-///
-/// This module provides an struct `PaletteColor`
-/// that represents palette color, index should be between 0 to 255 mean u8.
-/// It also implements the `Stylify` trait for `PaletteColor`,
-/// which allows for generating styles based on the paint type.
+//! A module for creating palette color.
+//!
+//! This module provides an struct `PaletteColor`
+//! that represents palette color, index should be between 0 to 255 mean u8.
+//! It also implements the `Stylify` trait for `PaletteColor`,
+//! which allows for generating styles based on the paint type.
 
 // =======================================================================
 
-use super::{ paint_type::PaintType, Stylify };
+use super::{paint_type::PaintType, Stylify};
 
 // =======================================================================
 
