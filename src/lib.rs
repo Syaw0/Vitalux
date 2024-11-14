@@ -7,15 +7,11 @@ mod ansi_code;
 mod styles;
 
 // =======================================================================
+
 use crate::{
     ansi_code::ANSIEscapeCode,
     styles::{
-        basic_color,
-        formatter,
-        paint_type::PaintType,
-        palette::PaletteColor,
-        rgb::Rgb,
-        Styles,
+        basic_color, formatter, paint_type::PaintType, palette::PaletteColor, rgb::Rgb, Styles,
     },
 };
 
@@ -93,7 +89,8 @@ impl StyledText {
     pub fn paint(&mut self) -> String {
         let mut default_paint_type = PaintType::FG;
 
-        let start_codes_list: Vec<String> = self.start_styles
+        let start_codes_list: Vec<String> = self
+            .start_styles
             .iter()
             .rev()
             .filter_map(|s| {
@@ -109,9 +106,8 @@ impl StyledText {
             .rev()
             .collect();
         let start_codes = start_codes_list.join("");
-        let end_codes = ANSIEscapeCode::new(
-            &formatter::RESET.make_styles(Some(&default_paint_type))
-        ).code();
+        let end_codes =
+            ANSIEscapeCode::new(&formatter::RESET.make_styles(Some(&default_paint_type))).code();
 
         format!("{}{}{}", start_codes, self.text, end_codes)
     }
@@ -128,7 +124,8 @@ impl StyledText {
     /// as background color
     /// **if the one `fg` call, all the colors will paint as foreground no matter there is before or after `fg`**
     pub fn fg(&mut self) -> &mut Self {
-        self.start_styles.push(Styles::StylePaintType(PaintType::FG));
+        self.start_styles
+            .push(Styles::StylePaintType(PaintType::FG));
         self
     }
 
@@ -144,7 +141,8 @@ impl StyledText {
     /// as foreground color
     /// **if the one `bg` call, all the colors will paint as background no matter there is before or after `bg`**
     pub fn bg(&mut self) -> &mut Self {
-        self.start_styles.push(Styles::StylePaintType(PaintType::BG));
+        self.start_styles
+            .push(Styles::StylePaintType(PaintType::BG));
         self
     }
 
@@ -172,7 +170,8 @@ impl StyledText {
     ///
     /// the index should be 8 bit color between 0 to 255.
     pub fn palette(&mut self, index: u8) -> &mut Self {
-        self.start_styles.push(Styles::StylePaletteColor(PaletteColor { index }));
+        self.start_styles
+            .push(Styles::StylePaletteColor(PaletteColor { index }));
         self
     }
 

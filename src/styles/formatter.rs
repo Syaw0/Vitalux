@@ -1,4 +1,9 @@
-use super::{ paint_type::PaintType, Styles, Stylify };
+//!
+//!
+
+// =======================================================================
+
+use super::{paint_type::PaintType, Styles, Stylify};
 
 // =======================================================================
 
@@ -91,13 +96,13 @@ mod tests {
     macro_rules! formatter_test {
         ($test_name:ident, $formatter_name:ident, $code:expr) => {
             #[test]
-            fn $test_name(){
-                match $formatter_name{
-                    Styles::StyleFormatter(Formatter{code})=>{
-                        assert_eq!(code,$code);
-                    },
-                    _=>{
-                        panic!("This formatter is not a Formatter!"); 
+            fn $test_name() {
+                match $formatter_name {
+                    Styles::StyleFormatter(Formatter { code }) => {
+                        assert_eq!(code, $code);
+                    }
+                    _ => {
+                        panic!("This formatter is not a Formatter!");
                     }
                 }
             }

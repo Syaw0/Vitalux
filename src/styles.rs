@@ -1,8 +1,6 @@
-/// A module for working with styles and colors.
-///
-/// This module provides a set of types and traits for representing
-///  different styles and colors,
-/// as well as a way to generate styles based on a given paint type.
+//! A module for working with styles and colors.
+//! This module provides a set of types and traits for representing different styles and colors,
+//! as well as a way to generate styles based on a given paint type.
 
 // =======================================================================
 
@@ -13,11 +11,12 @@ use palette::PaletteColor;
 use rgb::Rgb;
 
 // =======================================================================
-pub mod paint_type;
-pub mod formatter;
+
 pub mod basic_color;
-pub mod rgb;
+pub mod formatter;
+pub mod paint_type;
 pub mod palette;
+pub mod rgb;
 
 // =======================================================================
 
